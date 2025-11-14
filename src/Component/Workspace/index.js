@@ -31,7 +31,7 @@ const Workspace = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login-teacher");
+    navigate("/");
   };
 
   return (

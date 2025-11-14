@@ -81,7 +81,7 @@ const Home = () => {
   const handleLogout = () => {
     const auth = getAuth();
     auth.signOut().then(() => {
-      navigate("/login-teacher");
+      navigate("/");
     });
   };
 
