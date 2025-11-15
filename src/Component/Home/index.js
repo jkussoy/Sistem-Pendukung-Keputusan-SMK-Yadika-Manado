@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Logo from "./../../Assets/Image/Logo.png";
 import "./style.css";
+import { saveLog } from "../../Utils/savelogs";
 
 const Home = () => {
   const [topic, setTopic] = useState("");
@@ -12,127 +13,221 @@ const Home = () => {
   const [showForm, setShowForm] = useState(false);
   const [username, setUsername] = useState("");
   const [userUID, setUserUID] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [auditLogs, setAuditLogs] = useState([]); // ⭐ TAMBAHAN
+
   const navigate = useNavigate();
 
-  // 🔹 Ambil data user yang login dari Firebase Auth + data agenda
+  /* =====================================================
+     LOAD USER + ROLE + AGENDAS
+     ===================================================== */
   useEffect(() => {
     const auth = getAuth();
 
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUsername(user.displayName || user.email || "Guru");
         setUserUID(user.uid);
+        setUserRole(localStorage.getItem("userRole"));
       } else {
-        // Jika belum login, arahkan ke login
-        navigate("/login-teacher");
+        navigate("/login");
       }
     });
 
-    // 🔹 Ambil data agenda dari Firebase
     const agendaRef = ref(db, "agendas");
-    const unsubscribeAgenda = onValue(agendaRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const loaded = Object.entries(data).map(([id, value]) => ({
-          id,
-          ...value,
-        }));
-        loaded.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
-        setAgendas(loaded);
-      } else {
-        setAgendas([]);
-      }
+    const unsubAgenda = onValue(agendaRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      const all = Object.entries(data).map(([id, val]) => ({ id, ...val }));
+      all.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+      setAgendas(all);
     });
 
     return () => {
-      unsubscribeAuth();
-      unsubscribeAgenda();
+      unsubAuth();
+      unsubAgenda();
     };
   }, [navigate]);
 
-  // 🔹 Tambah agenda baru
-  const handleAddAgenda = () => {
+  /* =====================================================
+     LOAD AUDIT LOGS (Operator Only)
+     ===================================================== */
+  useEffect(() => {
+    if (userRole !== "operator") return;
+
+    const logRef = ref(db, "auditLogs");
+    const unsub = onValue(logRef, (snap) => {
+      const data = snap.val() || {};
+
+      const list = Object.entries(data).map(([id, v]) => ({
+        id,
+        ...v,
+      }));
+
+      list.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+      setAuditLogs(list.slice(0, 10));
+    });
+
+    return () => unsub();
+  }, [userRole]);
+
+  /* =====================================================
+     ADD AGENDA
+     ===================================================== */
+  const handleAddAgenda = async () => {
     if (topic.trim() === "") return alert("Topik tidak boleh kosong!");
 
-    const agendaData = {
+    const data = {
       topic,
       createdBy: username,
       userId: userUID,
       date: new Date().toLocaleString(),
       createdAt: Date.now(),
+      votingClosed: false,
     };
 
-    push(ref(db, "agendas"), agendaData)
-      .then(() => {
-        alert("Agenda berhasil ditambahkan!");
-        setTopic("");
-        setShowForm(false);
-      })
-      .catch((err) => alert("Gagal menambah agenda: " + err.message));
-  };
+    const newAgenda = await push(ref(db, "agendas"), data);
 
-  // 🔹 Hapus agenda
-  const handleDelete = (id) => {
-    if (!window.confirm("Yakin ingin menghapus agenda ini?")) return;
-    remove(ref(db, `agendas/${id}`));
-  };
-
-  // 🔹 Logout
-  const handleLogout = () => {
-    const auth = getAuth();
-    auth.signOut().then(() => {
-      navigate("/");
+    await saveLog({
+      userId: userUID,
+      userName: username,
+      role: userRole,
+      action: "ADD_AGENDA",
+      agendaId: newAgenda.key,
+      detail: `Menambahkan agenda: ${topic}`,
     });
+
+    alert("Agenda berhasil dibuat!");
+    setTopic("");
+    setShowForm(false);
   };
 
-  // 🔹 Komponen untuk Edit Topic Langsung
+  /* =====================================================
+     DELETE AGENDA
+     ===================================================== */
+  const handleDelete = async (id) => {
+    if (userRole !== "operator") return alert("Akses ditolak!");
+
+    if (!window.confirm("Yakin ingin menghapus agenda ini?")) return;
+
+    await remove(ref(db, `agendas/${id}`));
+    await remove(ref(db, `voteCount/${id}`));
+    await remove(ref(db, `votes/${id}`));
+    await remove(ref(db, `votingLogs/${id}`));
+
+    await saveLog({
+      userId: userUID,
+      userName: username,
+      role: userRole,
+      action: "DELETE_AGENDA",
+      agendaId: id,
+      detail: "Menghapus agenda beserta seluruh data voting",
+    });
+
+    alert("Agenda berhasil dihapus!");
+  };
+
+  /* =====================================================
+     RESET VOTING
+     ===================================================== */
+  const handleResetVoting = async (agenda) => {
+    if (userRole !== "operator") return;
+
+    if (!window.confirm("Reset semua suara untuk agenda ini?")) return;
+
+    await remove(ref(db, `voteCount/${agenda.id}`));
+    await remove(ref(db, `votes/${agenda.id}`));
+
+    await saveLog({
+      userId: userUID,
+      userName: username,
+      role: userRole,
+      action: "RESET_VOTING",
+      agendaId: agenda.id,
+      detail: `Mereset semua suara`,
+    });
+
+    alert("Voting berhasil di-reset!");
+  };
+
+  /* =====================================================
+     TOGGLE OPEN/CLOSE VOTING
+     ===================================================== */
+  const toggleVoting = async (agenda) => {
+    if (userRole !== "operator") return;
+
+    const willClose = !agenda.votingClosed;
+
+    if (!window.confirm(willClose ? "Tutup voting?" : "Buka voting kembali?"))
+      return;
+
+    await update(ref(db, `agendas/${agenda.id}`), {
+      votingClosed: willClose,
+    });
+
+    await saveLog({
+      userId: userUID,
+      userName: username,
+      role: userRole,
+      action: willClose ? "CLOSE_VOTING" : "OPEN_VOTING",
+      agendaId: agenda.id,
+      detail: willClose ? "Menutup voting" : "Membuka voting",
+    });
+
+    alert("Berhasil!");
+  };
+
+  /* =====================================================
+     EDIT TOPIC — INLINE
+     ===================================================== */
   const EditableTopic = ({ agenda }) => {
     const [editing, setEditing] = useState(false);
     const [newTopic, setNewTopic] = useState(agenda.topic);
-    const [status, setStatus] = useState(""); // "saving" | "saved" | ""
+    const [status, setStatus] = useState("");
 
-    const saveToFirebase = async () => {
-      if (newTopic.trim() === "" || newTopic === agenda.topic) return;
+    if (userRole !== "operator") {
+      return <span className="agenda-col topic">{agenda.topic}</span>;
+    }
+
+    const saveTopic = async () => {
+      if (newTopic.trim() === "" || newTopic === agenda.topic) {
+        setEditing(false);
+        return;
+      }
+
       setStatus("saving");
-      try {
-        await update(ref(db, `agendas/${agenda.id}`), { topic: newTopic });
-        setStatus("saved");
-        setTimeout(() => setStatus(""), 1500);
-      } catch (err) {
-        alert("Gagal menyimpan perubahan: " + err.message);
-        setStatus("");
-      }
-    };
 
-    const handleBlur = () => {
-      saveToFirebase();
+      await update(ref(db, `agendas/${agenda.id}`), { topic: newTopic });
+
+      await saveLog({
+        userId: userUID,
+        userName: username,
+        role: userRole,
+        action: "EDIT_TOPIC",
+        agendaId: agenda.id,
+        detail: `Mengubah topik menjadi: ${newTopic}`,
+      });
+
+      setStatus("saved");
+      setTimeout(() => setStatus(""), 1500);
       setEditing(false);
-    };
-
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleBlur();
-      }
     };
 
     return (
       <span className="agenda-col topic editable-topic">
         {editing ? (
           <input
+            className="topic-input"
             autoFocus
-            type="text"
             value={newTopic}
             onChange={(e) => setNewTopic(e.target.value)}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            className="topic-input"
+            onBlur={saveTopic}
+            onKeyDown={(e) => e.key === "Enter" && saveTopic()}
           />
         ) : (
-          <span onClick={() => setEditing(true)} title="Klik untuk edit">
-            {newTopic || "Tanpa Judul"}
-          </span>
+          <span onClick={() => setEditing(true)}>{agenda.topic}</span>
         )}
+
         {status === "saving" && (
           <small className="save-status">💾 Saving...</small>
         )}
@@ -143,73 +238,97 @@ const Home = () => {
     );
   };
 
+  /* =====================================================
+     LOGOUT
+     ===================================================== */
+  const handleLogout = () => {
+    const auth = getAuth();
+    auth.signOut();
+    navigate("/landing-page");
+  };
+
+  /* =====================================================
+     RENDER PAGE
+     ===================================================== */
   return (
     <div className="dashboard-wrapper">
       {/* HEADER */}
       <header className="topbar">
         <div className="left-header">
-          <img src={Logo} alt="Logo Sekolah" className="logo-header" />
+          <img src={Logo} alt="Logo" className="logo-header" />
           <h2>Sistem Pendukung Keputusan SMK Yadika Manado</h2>
         </div>
+
         <div className="user-info">
-          <span className="username">{username || "Guru"}</span>
+          <span className="username">{username}</span>
           <button onClick={handleLogout} className="logout">
             Log Out
           </button>
         </div>
       </header>
 
-      {/* BODY */}
       <div className="content-layout">
-        {/* SIDEBAR */}
         <aside className="sidebar">
-          <button className="menu-btn active" onClick={() => navigate("/")}>
+          <button className="menu-btn active" onClick={() => navigate("/home")}>
             🏠 Home
           </button>
         </aside>
 
-        {/* MAIN CONTENT */}
         <main className="main-content">
           <h3 className="welcome-title">
             Selamat Datang di Sistem Pendukung Keputusan SMK Yadika Manado
           </h3>
 
           <div className="agenda-section">
-            {/* FORM TAMBAH AGENDA */}
-            <button
-              className="add-agenda-toggle"
-              onClick={() => setShowForm(!showForm)}
-            >
-              ➕ {showForm ? "Tutup Form" : "Add Agenda"}
-            </button>
+            {/* BUTTON ADD */}
+            {userRole === "operator" && (
+              <button
+                className="add-agenda-toggle"
+                onClick={() => setShowForm(!showForm)}
+              >
+                ➕ {showForm ? "Tutup Form" : "Add Agenda"}
+              </button>
+            )}
 
+            {/* FORM ADD */}
             {showForm && (
               <div className="add-agenda-box">
                 <div className="agenda-input-row">
                   <input
                     type="text"
+                    placeholder="Masukkan topik agenda..."
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    placeholder="Masukkan topik agenda..."
                   />
                   <button onClick={handleAddAgenda}>Submit</button>
                 </div>
+
                 <p className="agenda-info-text">
-                  Dibuat oleh: <strong>{username}</strong> |{" "}
-                  <strong>{new Date().toLocaleString()}</strong>
+                  Pastikan topik agenda jelas dan mudah dipahami oleh
+                  guru/siswa.
                 </p>
               </div>
             )}
 
-            {/* LIST AGENDA */}
+            {/* AGENDA LIST */}
             <div className="agenda-list">
               {agendas.length === 0 ? (
-                <p className="no-agenda">No Upcoming Agenda</p>
+                <p className="no-agenda">No Agenda</p>
               ) : (
-                agendas.map((a, idx) => (
+                agendas.map((a, i) => (
                   <div key={a.id} className="agenda-row">
-                    <span className="agenda-col number">#{idx + 1}</span>
+                    <span className="agenda-col number">#{i + 1}</span>
+
                     <EditableTopic agenda={a} />
+
+                    <span className="agenda-col status">
+                      {a.votingClosed ? (
+                        <span className="status-red">🔴 Voting Closed</span>
+                      ) : (
+                        <span className="status-green">🟢 Voting Open</span>
+                      )}
+                    </span>
+
                     <span className="agenda-col user">{a.createdBy}</span>
                     <span className="agenda-col date">{a.date}</span>
 
@@ -218,20 +337,71 @@ const Home = () => {
                         className="edit-btn"
                         onClick={() => navigate(`/workspace/${a.id}`)}
                       >
-                        ✏️ Edit
+                        View
                       </button>
 
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(a.id)}
-                      >
-                        🗑️ Hapus
-                      </button>
+                      {userRole === "operator" && (
+                        <>
+                          <button
+                            className="toggle-voting-btn"
+                            onClick={() => toggleVoting(a)}
+                          >
+                            {a.votingClosed ? "🔓 Buka" : "🔒 Tutup"}
+                          </button>
+
+                          <button
+                            className="reset-btn"
+                            onClick={() => handleResetVoting(a)}
+                          >
+                            🔄 Reset
+                          </button>
+
+                          <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(a.id)}
+                          >
+                            🗑 Hapus
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 ))
               )}
             </div>
+
+            {/* =====================================
+                AUDIT LOGS AREA (Operator Only)
+                ===================================== */}
+            {/* {userRole === "operator" && (
+              <div className="audit-home-box">
+                <h3 className="audit-home-title">
+                  📘 Aktivitas Sistem Terbaru
+                </h3>
+
+                {auditLogs.length === 0 ? (
+                  <p className="empty-log">Belum ada aktivitas.</p>
+                ) : (
+                  <div className="audit-home-list">
+                    {auditLogs.map((log) => (
+                      <div key={log.id} className="audit-home-item">
+                        <div className="log-row">
+                          <span className="log-badge">{log.action}</span>
+
+                          <div className="log-info">
+                            <p className="log-detail">{log.detail}</p>
+                            <p className="log-meta">
+                              {log.userName} ({log.role}) •{" "}
+                              {new Date(log.time).toLocaleString("id-ID")}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )} */}
           </div>
         </main>
       </div>

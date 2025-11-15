@@ -1,0 +1,146 @@
+.result-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.result-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 20px;
+}
+
+/* Tombol Hitung */
+.add-criteria-toggle {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: all 0.2s;
+}
+
+.add-criteria-toggle:hover {
+  background: #256528;
+}
+
+.add-criteria-toggle:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.table-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 25px 0 10px 0;
+}
+
+.data-table.moora {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.data-table.moora th,
+.data-table.moora td {
+  padding: 10px 14px;
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.data-table.moora th {
+  background: #004aad;
+  color: white;
+  font-weight: 600;
+}
+
+.data-table.moora tr:hover td {
+  background: #f3f6ff;
+}
+
+.gold-row {
+  background: #fff8e1 !important;
+  font-weight: bold;
+  border-left: 4px solid #ffc107;
+}
+
+/* Animasi Fade In */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .data-table.moora th,
+  .data-table.moora td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .result-container {
+    padding: 15px;
+  }
+
+  .table-title {
+    font-size: 14px;
+  }
+}
+.voting-graphs {
+  display: flex;
+  gap: 40px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.vote-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.vote-btn:disabled {
+  cursor: not-allowed;
+}
+
+.voted-label {
+  color: green;
+  font-weight: bold;
+}
+
+.voting-result-wrapper {
+  padding: 20px;
+}
+
+.vote-result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.vote-result-table th {
+  background: #dadada;
+  padding: 10px;
+}
+
+.vote-result-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}

@@ -1,3 +1,7 @@
+/* ============================= */
+/*        RESULT CONTAINER       */
+/* ============================= */
+
 .result-container {
   background: #fff;
   border-radius: 10px;
@@ -14,7 +18,7 @@
   margin-bottom: 20px;
 }
 
-/* Tombol Hitung */
+/* Tombol Hitung MOORA */
 .add-criteria-toggle {
   background: #2e7d32;
   color: white;
@@ -43,6 +47,10 @@
   margin: 25px 0 10px 0;
 }
 
+/* ============================= */
+/*        GLOBAL TABLE STYLE     */
+/* ============================= */
+
 .data-table.moora {
   width: 100%;
   border-collapse: collapse;
@@ -61,7 +69,7 @@
 }
 
 .data-table.moora th {
-  background: #004aad;
+  background: #004aad; /* Samakan semua header table */
   color: white;
   font-weight: 600;
 }
@@ -70,23 +78,121 @@
   background: #f3f6ff;
 }
 
+/* Highlight ranking 1 */
 .gold-row {
   background: #fff8e1 !important;
   font-weight: bold;
   border-left: 4px solid #ffc107;
 }
 
-/* Animasi Fade In */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* ============================= */
+/*        VOTING BUTTONS         */
+/* ============================= */
+
+.vote-btn {
+  padding: 6px 14px;
+  background: #004aad; /* biru tema */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsif */
+.vote-btn:hover {
+  background: #003780;
+  transform: translateY(-1px);
+}
+
+.vote-btn:disabled {
+  background: #7d7d7d;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Sudah memilih */
+.voted-label {
+  color: #1e7d36;
+  background: #e9f8ef;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #1e7d36;
+}
+
+/* Tombol unvote */
+.unvote-btn {
+  margin-top: 5px;
+  padding: 5px 12px;
+  background: #e53935;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.unvote-btn:hover {
+  background: #c62828;
+}
+
+.vote-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================= */
+/*          GRAFIK VOTING        */
+/* ============================= */
+
+.voting-graphs {
+  display: flex;
+  gap: 40px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.voting-graphs > div {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================= */
+/*         VOTE RESULT TABLE     */
+/* ============================= */
+
+.vote-result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.vote-result-table th {
+  background: #004aad;
+  color: #fff;
+  padding: 10px;
+}
+
+.vote-result-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+/* ============================= */
+/*        RESPONSIVE STYLE       */
+/* ============================= */
+
 @media (max-width: 768px) {
   .data-table.moora th,
   .data-table.moora td {
@@ -101,4 +207,24 @@
   .table-title {
     font-size: 14px;
   }
+
+  .voting-graphs {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.result-final td:nth-child(4) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

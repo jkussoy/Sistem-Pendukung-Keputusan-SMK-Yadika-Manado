@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../Config/Firebase";
 import { ref, push, onValue, remove, update } from "firebase/database";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import "./style.css";
 
 const Criteria = () => {
   const { agendaId } = useParams();
+  const navigate = useNavigate();
+  const { userRole } = useOutletContext(); // ← ROLE DARI WORKSPACE
+
   const [criteria, setCriteria] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newCriteria, setNewCriteria] = useState({
@@ -15,6 +18,13 @@ const Criteria = () => {
     weight: "",
   });
   const [username, setUsername] = useState("");
+
+  // 🚫 ROLE VALIDATION — hanya operator boleh akses halaman ini
+  useEffect(() => {
+    if (userRole !== "operator") {
+      navigate(`/workspace/${agendaId}/workspacehome`);
+    }
+  }, [userRole, navigate, agendaId]);
 
   // 🔹 Ambil data user & criteria dari Firebase
   useEffect(() => {
@@ -59,13 +69,13 @@ const Criteria = () => {
     const { code, name, label, weight } = newCriteria;
 
     const newData = {
-      agendaId: agendaId,
+      agendaId,
       code: code.toUpperCase(),
       name: name.trim(),
       label,
       weight: parseFloat(weight),
-      autoWeight: 0, // ← untuk hasil MEREC nanti
-      createdBy: username || "Guru",
+      autoWeight: 0,
+      createdBy: username || "Operator",
       createdAt: new Date().toISOString(),
     };
 
@@ -86,11 +96,13 @@ const Criteria = () => {
   // 🔹 Inline Edit (auto save)
   const handleEdit = (id, field, value) => {
     let cleanValue = value;
+
     if (field === "weight" || field === "autoWeight") {
       cleanValue = parseFloat(value) || 0;
     } else {
       cleanValue = value.trim();
     }
+
     update(ref(db, `criteria/${agendaId}/${id}`), { [field]: cleanValue });
   };
 
@@ -99,12 +111,12 @@ const Criteria = () => {
       <header className="criteria-header">
         <h2>📊 Manajemen Kriteria</h2>
         <p>
-          Data kriteria digunakan untuk menentukan dasar perhitungan dalam
-          metode MEREC dan MOORA.
+          Data kriteria digunakan untuk perhitungan dalam metode MEREC dan
+          MOORA.
         </p>
       </header>
 
-      {/* Tombol Tambah */}
+      {/* Form tambah hanya operator */}
       <button
         className="btn-toggle-form"
         onClick={() => setShowForm(!showForm)}
@@ -112,7 +124,6 @@ const Criteria = () => {
         {showForm ? "⬆️ Tutup Form" : "➕ Tambah Kriteria"}
       </button>
 
-      {/* FORM TAMBAH */}
       {showForm && (
         <div className="criteria-form">
           <div className="criteria-form-grid">
@@ -126,35 +137,37 @@ const Criteria = () => {
                 }
               />
             </div>
+
             <div className="form-group">
               <label>Nama Kriteria</label>
               <input
-                placeholder="Masukkan nama kriteria..."
+                placeholder="Masukkan nama..."
                 value={newCriteria.name}
                 onChange={(e) =>
                   setNewCriteria({ ...newCriteria, name: e.target.value })
                 }
               />
             </div>
+
             <div className="form-group">
-              <label>Label (Benefit/Cost)</label>
+              <label>Label</label>
               <select
                 value={newCriteria.label}
                 onChange={(e) =>
                   setNewCriteria({ ...newCriteria, label: e.target.value })
                 }
               >
-                <option value="">Pilih Label</option>
+                <option value="">Pilih</option>
                 <option value="Benefit">Benefit</option>
                 <option value="Cost">Cost</option>
               </select>
             </div>
+
             <div className="form-group">
-              <label>Bobot Manual</label>
+              <label>Bobot</label>
               <input
                 type="number"
                 step="0.01"
-                placeholder="Contoh: 0.25"
                 value={newCriteria.weight}
                 onChange={(e) =>
                   setNewCriteria({ ...newCriteria, weight: e.target.value })
@@ -171,7 +184,7 @@ const Criteria = () => {
         </div>
       )}
 
-      {/* TABEL DATA */}
+      {/* TABEL */}
       <section className="criteria-table-section">
         <h3>📋 Daftar Kriteria</h3>
 
@@ -179,18 +192,19 @@ const Criteria = () => {
           <thead>
             <tr>
               <th>Kode</th>
-              <th>Nama Kriteria</th>
+              <th>Nama</th>
               <th>Label</th>
               <th>Bobot Manual</th>
               <th>Bobot MEREC</th>
               <th>Aksi</th>
             </tr>
           </thead>
+
           <tbody>
             {criteria.length === 0 ? (
               <tr>
                 <td colSpan="6" className="empty">
-                  Belum ada kriteria ditambahkan
+                  Belum ada kriteria
                 </td>
               </tr>
             ) : (
@@ -205,6 +219,7 @@ const Criteria = () => {
                       className="editable-input"
                     />
                   </td>
+
                   <td>
                     <input
                       defaultValue={c.name}
@@ -214,6 +229,7 @@ const Criteria = () => {
                       className="editable-input"
                     />
                   </td>
+
                   <td>
                     <input
                       defaultValue={c.label}
@@ -223,6 +239,7 @@ const Criteria = () => {
                       className="editable-input"
                     />
                   </td>
+
                   <td>
                     <input
                       type="number"
@@ -232,18 +249,17 @@ const Criteria = () => {
                       className="editable-input"
                     />
                   </td>
+
                   <td>
                     <input
                       type="number"
                       step="0.0001"
                       defaultValue={c.autoWeight || 0}
-                      onBlur={(e) =>
-                        handleEdit(c.id, "autoWeight", e.target.value)
-                      }
-                      className="editable-input auto-weight"
                       readOnly
+                      className="editable-input auto-weight"
                     />
                   </td>
+
                   <td>
                     <button
                       className="btn-delete"

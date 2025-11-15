@@ -4,18 +4,21 @@ import { db } from "../../Config/Firebase";
 import { ref, onValue } from "firebase/database";
 import Logo from "../../Assets/Image/Logo.png";
 import "./style.css";
-import WorkspaceHome from "../WorkspaceHome";
 
 const Workspace = () => {
   const { agendaId } = useParams();
   const [agenda, setAgenda] = useState(null);
   const [username, setUsername] = useState("");
+  const [userRole, setUserRole] = useState(""); // ROLE HERE
   const navigate = useNavigate();
 
-  // Ambil nama user & data agenda dari Firebase
+  // Ambil data user & data agenda dari Firebase
   useEffect(() => {
     const storedName = localStorage.getItem("teacherName");
+    const storedRole = localStorage.getItem("userRole");
+
     if (storedName) setUsername(storedName);
+    if (storedRole) setUserRole(storedRole);
 
     const agendaRef = ref(db, `agendas/${agendaId}`);
     const unsubscribe = onValue(agendaRef, (snapshot) => {
@@ -31,7 +34,7 @@ const Workspace = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/");
+    navigate("/landing-page");
   };
 
   return (
@@ -54,6 +57,18 @@ const Workspace = () => {
       <div className="workspace-layout">
         {/* SIDEBAR */}
         <aside className="workspace-sidebar">
+          {userRole === "operator" && (
+            <NavLink
+              to={`/workspace/${agendaId}/voting-result`}
+              className={({ isActive }) =>
+                isActive ? "workspace-menu active" : "workspace-menu"
+              }
+            >
+              🗳️ Voting Result
+            </NavLink>
+          )}
+
+          {/* Semua role */}
           <NavLink
             to={`/workspace/${agendaId}/workspacehome`}
             end
@@ -63,14 +78,20 @@ const Workspace = () => {
           >
             🏠 Home
           </NavLink>
-          <NavLink
-            to={`/workspace/${agendaId}/criteria`}
-            className={({ isActive }) =>
-              isActive ? "workspace-menu active" : "workspace-menu"
-            }
-          >
-            📋 Criteria
-          </NavLink>
+
+          {/* Criteria — operator only */}
+          {userRole === "operator" && (
+            <NavLink
+              to={`/workspace/${agendaId}/criteria`}
+              className={({ isActive }) =>
+                isActive ? "workspace-menu active" : "workspace-menu"
+              }
+            >
+              📋 Criteria
+            </NavLink>
+          )}
+
+          {/* Alternative — semua role */}
           <NavLink
             to={`/workspace/${agendaId}/alternatives`}
             className={({ isActive }) =>
@@ -79,6 +100,8 @@ const Workspace = () => {
           >
             🧩 Alternative
           </NavLink>
+
+          {/* Weighting — semua role boleh */}
           <NavLink
             to={`/workspace/${agendaId}/weighting`}
             className={({ isActive }) =>
@@ -87,6 +110,8 @@ const Workspace = () => {
           >
             ⚖️ Weight
           </NavLink>
+
+          {/* Result — semua role */}
           <NavLink
             to={`/workspace/${agendaId}/result`}
             className={({ isActive }) =>
@@ -109,7 +134,8 @@ const Workspace = () => {
             </h3>
 
             <div className="workspace-box">
-              <Outlet context={{ agendaId, agenda }} />
+              {/* Pass role ke semua halaman */}
+              <Outlet context={{ agendaId, agenda, userRole }} />
             </div>
           </div>
         </main>

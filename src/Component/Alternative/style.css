@@ -257,3 +257,33 @@
     width: 50px;
   }
 }
+.criteria-notes-box {
+  background: #f8f9fa;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.criteria-notes-box h4 {
+  margin-bottom: 10px;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.notes-table th {
+  background: #007bff;
+  padding: 8px;
+  text-align: left;
+  color: white;
+  border-bottom: 2px solid #ccc;
+}
+
+.notes-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}

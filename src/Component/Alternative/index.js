@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../Config/Firebase";
 import { ref, push, onValue, remove, update } from "firebase/database";
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
 import "./style.css";
 
 const Alternative = () => {
   const { agendaId } = useParams();
+  const { userRole } = useOutletContext(); // ROLE IMPORTED
   const [alternatives, setAlternatives] = useState([]);
   const [criteria, setCriteria] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -13,7 +14,7 @@ const Alternative = () => {
   const [values, setValues] = useState({});
   const [username, setUsername] = useState("");
 
-  // 🔹 Ambil data user, criteria, dan alternative dari Firebase
+  // Ambil data user, criteria, dan alternative dari Firebase
   useEffect(() => {
     const storedName = localStorage.getItem("teacherName");
     if (storedName) setUsername(storedName);
@@ -53,7 +54,7 @@ const Alternative = () => {
     }
   }, [agendaId]);
 
-  // 🔹 Tambah alternatif baru
+  // Tambah alternatif baru → operator only
   const handleAddAlternative = () => {
     if (!newAlt.code || !newAlt.name)
       return alert("Harap isi semua kolom alternatif!");
@@ -74,14 +75,15 @@ const Alternative = () => {
       .catch((err) => alert("Gagal menambah alternatif: " + err.message));
   };
 
-  // 🔹 Hapus alternatif
+  // Hapus alternatif → operator only
   const handleDelete = (altId) => {
     if (!window.confirm("Yakin ingin menghapus alternatif ini?")) return;
+    if (userRole !== "operator") return alert("Akses ditolak!");
     remove(ref(db, `alternatives/${agendaId}/${altId}`));
     remove(ref(db, `alternativeValues/${agendaId}/${altId}`));
   };
 
-  // 🔹 Edit nilai alternatif terhadap kriteria (auto save)
+  // Input nilai alternatif → semua role boleh
   const handleValueChange = (altId, critCode, value) => {
     const numValue = parseFloat(value) || 0;
     update(ref(db, `alternativeValues/${agendaId}/${altId}`), {
@@ -95,24 +97,27 @@ const Alternative = () => {
         <h2>🧮 Data Alternatif</h2>
         <p>
           Setiap alternatif akan dinilai berdasarkan semua kriteria yang sudah
-          kamu buat.
+          dibuat.
         </p>
       </header>
 
-      <button
-        className="btn-toggle-form"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? "⬆️ Tutup Form" : "➕ Tambah Alternatif"}
-      </button>
+      {/* Tambah alternatif → operator only */}
+      {userRole === "operator" && (
+        <button
+          className="btn-toggle-form"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "⬆️ Tutup Form" : "➕ Tambah Alternatif"}
+        </button>
+      )}
 
-      {showForm && (
+      {showForm && userRole === "operator" && (
         <div className="alt-form">
           <div className="alt-form-grid">
             <div className="form-group">
               <label>Kode Alternatif</label>
               <input
-                placeholder="Misal: A1"
+                placeholder="A1, A2..."
                 value={newAlt.code}
                 onChange={(e) => setNewAlt({ ...newAlt, code: e.target.value })}
               />
@@ -121,7 +126,7 @@ const Alternative = () => {
             <div className="form-group">
               <label>Nama Alternatif</label>
               <input
-                placeholder="Masukkan nama alternatif..."
+                placeholder="Nama alternatif..."
                 value={newAlt.name}
                 onChange={(e) => setNewAlt({ ...newAlt, name: e.target.value })}
               />
@@ -136,6 +141,38 @@ const Alternative = () => {
         </div>
       )}
 
+      {/* 📝 NOTES PENJELASAN C1, C2, C3 */}
+      <div className="criteria-notes-box">
+        <h4>📝 Penjelasan Kode Kriteria</h4>
+
+        <table className="notes-table">
+          <thead>
+            <tr>
+              <th>Kode</th>
+              <th>Nama Kriteria</th>
+              <th>Label</th>
+            </tr>
+          </thead>
+          <tbody>
+            {criteria.map((c) => (
+              <tr key={c.id}>
+                <td>{c.code}</td>
+                <td>{c.name}</td>
+                <td>{c.label}</td>
+              </tr>
+            ))}
+
+            {criteria.length === 0 && (
+              <tr>
+                <td colSpan="3" style={{ textAlign: "center" }}>
+                  Belum ada kriteria
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
       <section className="alt-table-section">
         <h3>📋 Matriks Nilai Alternatif per Kriteria</h3>
 
@@ -149,6 +186,7 @@ const Alternative = () => {
               <th>Aksi</th>
             </tr>
           </thead>
+
           <tbody>
             {alternatives.length === 0 ? (
               <tr>
@@ -160,6 +198,7 @@ const Alternative = () => {
               alternatives.map((alt) => (
                 <tr key={alt.id}>
                   <td>{alt.name}</td>
+
                   {criteria.map((c) => (
                     <td key={c.code}>
                       <input
@@ -177,13 +216,16 @@ const Alternative = () => {
                       />
                     </td>
                   ))}
+
                   <td>
-                    <button
-                      className="btn-delete"
-                      onClick={() => handleDelete(alt.id)}
-                    >
-                      🗑️
-                    </button>
+                    {userRole === "operator" && (
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(alt.id)}
+                      >
+                        🗑️
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))

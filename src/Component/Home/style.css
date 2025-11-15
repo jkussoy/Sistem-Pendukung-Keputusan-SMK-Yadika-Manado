@@ -126,11 +126,14 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
+  margin-bottom: 20px;
 }
 
 .add-agenda-toggle:hover {
   background: #256528;
 }
+
+/* ===================== ADD AGENDA FORM (FIXED & CLEAN) ===================== */
 
 .add-agenda-box {
   background: white;
@@ -144,24 +147,33 @@
 .agenda-input-row {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .agenda-input-row input {
   flex: 1;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border: 1px solid #cfd8dc;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #f9fcff;
+}
+
+.agenda-input-row input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  outline: none;
 }
 
 .agenda-input-row button {
   background: #007bff;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
+  font-weight: 500;
   transition: 0.2s;
 }
 
@@ -179,6 +191,7 @@
 }
 
 /* ------------------ AGENDA LIST ------------------ */
+./* ------------------ AGENDA LIST ------------------ */
 .agenda-list {
   margin-top: 25px;
   display: flex;
@@ -186,131 +199,239 @@
   gap: 12px;
 }
 
+/* Struktur baris agenda */
 .agenda-row {
   display: grid;
-  grid-template-columns: 0.5fr 2fr 1.2fr 1.2fr 1fr;
+  grid-template-columns: 60px 1fr 150px 120px 180px auto;
   align-items: center;
+
   background: white;
-  padding: 12px 18px;
-  border-radius: 10px;
+  padding: 16px;
+  border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+  border-left: 4px solid #007bff;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .agenda-row:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
-.agenda-col {
+/* ------------------ AGENDA COLUMNS ------------------ */
+
+/* #Number */
+.agenda-col.number {
+  width: 55px;
+  font-weight: 700;
+  color: #1a237e;
+  flex-shrink: 0;
+}
+
+/* Topic (editable) */
+.agenda-col.topic {
+  /* width: 32%; */
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: normal !important;
+  line-height: 1.3;
+}
+
+/* Status Voting */
+.agenda-col.status {
+  /* width: 16%; */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Created By */
+.agenda-col.user {
+  /* width: 12%; */
+  text-align: center;
+  color: #444;
+  font-size: 14px;
+  flex-shrink: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Date Created */
+.agenda-col.date {
+  /* width: 17%; */
+  text-align: center;
+  font-size: 14px;
+  white-space: nowrap;
+  color: #555;
+  flex-shrink: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Actions (View / Delete / Toggle Voting) */
+.agenda-actions {
+  /* width: 18%; */
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* ------------------ BUTTONS ------------------ */
+.edit-btn,
+.delete-btn,
+.toggle-voting-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
   white-space: nowrap;
 }
 
-.agenda-col.number {
-  font-weight: 600;
-  color: #1a237e;
-}
-
-.agenda-col.topic {
-  flex: 1;
-  font-weight: 500;
-  color: #333;
-}
-
-.agenda-col.user,
-.agenda-col.date {
-  text-align: center;
-  font-size: 14px;
-  color: #555;
-}
-
-.agenda-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.edit-btn,
-.delete-btn {
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
+/* VIEW BUTTON */
 .edit-btn {
-  background: #facc15;
-  color: #333;
+  background-color: #4a90e2;
+  color: white;
 }
-
 .edit-btn:hover {
-  background: #fcd34d;
+  background-color: #3c78ba;
 }
 
+/* DELETE BUTTON */
 .delete-btn {
   background: #ef4444;
   color: white;
 }
-
 .delete-btn:hover {
-  background: #dc2626;
+  background: #d93025;
 }
 
-/* ------------------ INLINE EDITABLE ------------------ */
+/* TOGGLE VOTING BUTTON */
+.toggle-voting-btn {
+  background: #f57c00;
+  color: white;
+}
+.toggle-voting-btn:hover {
+  background: #dd6b00;
+}
+
+/* ------------------ STATUS COLORS ------------------ */
+.status-green {
+  color: #2e7d32;
+}
+.status-red {
+  color: #d32f2f;
+}
+
+/* ------------------ EDITABLE TOPIC ------------------ */
 .editable-topic {
   position: relative;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .topic-input {
-  font-size: 14px;
-  padding: 5px 8px;
   width: 100%;
+  padding: 6px 10px;
   border: 1px solid #007bff;
   border-radius: 6px;
+  font-size: 14px;
   outline: none;
   background: #f9fcff;
 }
 
 .topic-input:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
 .save-status {
-  font-size: 11px;
   margin-left: 6px;
+  font-size: 12px;
 }
-
-.save-status {
-  color: #888;
-}
-
 .save-status.success {
   color: #16a34a;
 }
+.reset-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
 
-/* ------------------ NO AGENDA ------------------ */
-.no-agenda {
-  color: #777;
+.reset-btn:hover {
+  background: #545b62;
+}
+.audit-home-box {
+  margin-top: 35px;
+  background: #f5f9ff;
+  padding: 18px;
+  border-radius: 10px;
+  border-left: 4px solid #1565c0;
+}
+
+.audit-home-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 12px;
+}
+
+.audit-home-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.audit-home-item {
+  background: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 4px solid #1e88e5;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.log-row {
+  display: flex;
+  gap: 12px;
+}
+
+.log-badge {
+  padding: 5px 12px;
+  background: #1976d2;
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.log-detail {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.log-meta {
+  font-size: 11px;
+  color: #555;
+}
+
+.empty-log {
+  padding: 14px;
+  background: #e3f2fd;
+  color: #1565c0;
+  border-radius: 8px;
   text-align: center;
-  padding: 20px;
-  background: #fff;
-  border-radius: 10px;
-  border: 1px dashed #ccc;
-}
-
-/* ------------------ SCROLLBAR ------------------ */
-.main-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.main-content::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
 }
