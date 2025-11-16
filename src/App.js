@@ -5,8 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-
-import LandingPage from "./Component/LandingPage/Index";
+import LandingPage from "./Component/LandingPage";
 import Home from "./Component/Home";
 import Criteria from "./Component/Criteria";
 import Workspace from "./Component/Workspace";
@@ -14,10 +13,10 @@ import Alternative from "./Component/Alternative";
 import WeightMerec from "./Component/Weighting";
 import Result from "./Component/Result";
 import WorkspaceHome from "./Component/WorkspaceHome";
-import Login from "./Component/Login/index";
 import SignUp from "./Component/SignUp/index";
 import VotingResult from "./Component/VotingResult";
 import AuditLogs from "./Component/AuditLogs";
+import Login from "./Component/Login";
 
 function App() {
   return (
