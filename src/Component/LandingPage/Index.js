@@ -20,7 +20,9 @@ const LandingPage = () => {
           LOGIN AS TEACHER
         </button>
 
-        <button className="login-btn">LOGIN AS STUDENT</button>
+        <button className="login-btn" onClick={handleTeacherLogin}>
+          LOGIN AS STUDENT
+        </button>
       </div>
     </div>
   );

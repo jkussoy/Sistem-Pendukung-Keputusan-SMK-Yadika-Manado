@@ -7,7 +7,7 @@ import "./style.css";
 const Criteria = () => {
   const { agendaId } = useParams();
   const navigate = useNavigate();
-  const { userRole } = useOutletContext(); // ← ROLE DARI WORKSPACE
+  const { userRole } = useOutletContext();
 
   const [criteria, setCriteria] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -17,16 +17,21 @@ const Criteria = () => {
     label: "",
     weight: "",
   });
+
   const [username, setUsername] = useState("");
 
-  // 🚫 ROLE VALIDATION — hanya operator boleh akses halaman ini
+  /* ===============================================
+     🚫 ROLE VALIDATION — hanya operator yang boleh
+  =============================================== */
   useEffect(() => {
     if (userRole !== "operator") {
       navigate(`/workspace/${agendaId}/workspacehome`);
     }
   }, [userRole, navigate, agendaId]);
 
-  // 🔹 Ambil data user & criteria dari Firebase
+  /* ===============================================
+     🔹 Ambil data criteria
+  =============================================== */
   useEffect(() => {
     const storedName = localStorage.getItem("teacherName");
     if (storedName) setUsername(storedName);
@@ -48,7 +53,9 @@ const Criteria = () => {
     }
   }, [agendaId]);
 
-  // 🔹 Validasi input
+  /* ===============================================
+     🔹 Validasi sebelum tambah kriteria
+  =============================================== */
   const validateCriteria = (data) => {
     const { code, name, label, weight } = data;
     if (!code || !name || !label || !weight) {
@@ -62,11 +69,30 @@ const Criteria = () => {
     return true;
   };
 
-  // 🔹 Tambah Criteria baru
+  const isDuplicateCriteria = (field, value, exceptId = null) => {
+    return criteria.some((c) => {
+      if (exceptId && c.id === exceptId) return false;
+      return c[field].toLowerCase() === value.toLowerCase();
+    });
+  };
+
+  /* ===============================================
+     🔹 Tambahkan kriteria baru
+  =============================================== */
   const handleAddCriteria = () => {
     if (!validateCriteria(newCriteria)) return;
 
     const { code, name, label, weight } = newCriteria;
+
+    if (isDuplicateCriteria("code", code)) {
+      alert("❌ Kode kriteria sudah digunakan!");
+      return;
+    }
+
+    if (isDuplicateCriteria("name", name)) {
+      alert("❌ Nama kriteria sudah digunakan!");
+      return;
+    }
 
     const newData = {
       agendaId,
@@ -84,46 +110,71 @@ const Criteria = () => {
         setNewCriteria({ code: "", name: "", label: "", weight: "" });
         setShowForm(false);
       })
-      .catch((err) => alert("❌ Gagal menambah kriteria: " + err.message));
+      .catch((err) => alert("❌ Error: " + err.message));
   };
 
-  // 🔹 Hapus Criteria
+  /* ===============================================
+     🔹 Hapus kriteria
+  =============================================== */
   const handleDelete = (id) => {
     if (!window.confirm("Yakin ingin menghapus kriteria ini?")) return;
     remove(ref(db, `criteria/${agendaId}/${id}`));
   };
 
-  // 🔹 Inline Edit (auto save)
+  /* ===============================================
+     🔹 Inline Edit (auto save)
+  =============================================== */
   const handleEdit = (id, field, value) => {
-    let cleanValue = value;
+    let cleanValue = value.trim();
 
     if (field === "weight" || field === "autoWeight") {
       cleanValue = parseFloat(value) || 0;
-    } else {
-      cleanValue = value.trim();
+    }
+
+    if (field === "code" && isDuplicateCriteria("code", cleanValue, id)) {
+      alert("❌ Kode kriteria sudah digunakan!");
+      return;
+    }
+
+    if (field === "name" && isDuplicateCriteria("name", cleanValue, id)) {
+      alert("❌ Nama kriteria sudah digunakan!");
+      return;
     }
 
     update(ref(db, `criteria/${agendaId}/${id}`), { [field]: cleanValue });
   };
 
+  /* ===============================================
+     🔹 Render
+  =============================================== */
   return (
     <div className="criteria-wrapper">
       <header className="criteria-header">
         <h2>📊 Manajemen Kriteria</h2>
-        <p>
-          Data kriteria digunakan untuk perhitungan dalam metode MEREC dan
-          MOORA.
-        </p>
+        <p>Kelola data kriteria untuk perhitungan MEREC dan MOORA.</p>
       </header>
 
-      {/* Form tambah hanya operator */}
+      {/* Toggle Form */}
       <button
         className="btn-toggle-form"
-        onClick={() => setShowForm(!showForm)}
+        onClick={() => {
+          if (showForm) {
+            const form = document.querySelector(".criteria-form");
+            form.classList.add("fadeOut");
+
+            setTimeout(() => {
+              setShowForm(false);
+              setNewCriteria({ code: "", name: "", label: "", weight: "" });
+            }, 250);
+          } else {
+            setShowForm(true);
+          }
+        }}
       >
         {showForm ? "⬆️ Tutup Form" : "➕ Tambah Kriteria"}
       </button>
 
+      {/* FORM */}
       {showForm && (
         <div className="criteria-form">
           <div className="criteria-form-grid">
@@ -177,14 +228,14 @@ const Criteria = () => {
           </div>
 
           <div className="form-submit">
-            <button onClick={handleAddCriteria} className="btn-primary">
+            <button className="btn-primary" onClick={handleAddCriteria}>
               Simpan
             </button>
           </div>
         </div>
       )}
 
-      {/* TABEL */}
+      {/* TABLE */}
       <section className="criteria-table-section">
         <h3>📋 Daftar Kriteria</h3>
 
@@ -208,8 +259,8 @@ const Criteria = () => {
                 </td>
               </tr>
             ) : (
-              criteria.map((c) => (
-                <tr key={c.id}>
+              criteria.map((c, index) => (
+                <tr key={c.id} style={{ "--i": index }}>
                   <td>
                     <input
                       defaultValue={c.code}
@@ -253,9 +304,8 @@ const Criteria = () => {
                   <td>
                     <input
                       type="number"
-                      step="0.0001"
-                      defaultValue={c.autoWeight || 0}
                       readOnly
+                      defaultValue={c.autoWeight || 0}
                       className="editable-input auto-weight"
                     />
                   </td>

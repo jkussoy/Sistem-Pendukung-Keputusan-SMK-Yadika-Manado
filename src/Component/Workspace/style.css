@@ -1,23 +1,33 @@
-/* ====== WRAPPER UTAMA ====== */
+/* ============================================================
+   WORKSPACE PREMIUM UI — IDENTICAL TO HOME DESIGN
+   ============================================================*/
+
+/* WRAPPER */
 .workspace-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* seluruh viewport */
-  background-color: #f8f9fb;
+  min-height: 100vh;
   font-family: "Poppins", sans-serif;
-  overflow: hidden; /* ❗ blokir scroll global */
+  background: radial-gradient(circle at top left, #e3f2fd, #eef2ff);
+  color: #1f2933;
+  overflow: hidden;
 }
 
-/* ====== HEADER ====== */
+/* HEADER — SAME AS HOME */
 .workspace-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 66px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  padding: 8px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
   border-bottom: 3px solid #007bff;
-  padding: 12px 24px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0; /* agar header tidak mengecil */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  z-index: 999;
 }
 
 .workspace-left {
@@ -25,179 +35,239 @@
   align-items: center;
   gap: 12px;
 }
+.workspace-logo-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #60a5fa, #2563eb);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+}
+
+.logo-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #60a5fa, #2563eb);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+}
 
 .workspace-logo {
-  width: 50px;
-  height: 50px;
+  width: 28px;
+}
+.workspace-title-text h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.workspace-header h2 {
-  font-size: 18px;
-  color: #1a237e;
-  font-weight: 600;
+.workspace-sub {
+  font-size: 12px;
+  color: #64748b;
 }
+
+.header-text h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.header-sub {
+  margin: 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* =======================================================
+   PREMIUM WORKSPACE HEADER — NO AVATAR VERSION
+   ======================================================= */
 
 .workspace-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-right: 40px;
+}
+
+/* User meta (name + role stacked) */
+.workspace-user-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+}
+
+.workspace-username {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Role badge */
+.workspace-role-pill {
+  margin-top: 2px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: capitalize;
+  width: fit-content;
+}
+
+.role-operator {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.role-teacher {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.role-student {
+  background: #fef9c3;
+  color: #b45309;
+  border: 1px solid #fde047;
+}
+
+/* Logout button */
+.workspace-logout {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.workspace-logout:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.35);
+}
+
+/* MAIN LAYOUT */
+.workspace-layout {
+  display: flex;
+  flex: 1;
+  margin-top: 64px;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+/* SIDEBAR — IDENTICAL TO HOME */
+.workspace-sidebar {
+  position: fixed;
+  top: 64px; /* sama seperti Home */
+  left: 0;
+  width: 210px;
+  height: calc(100vh - 64px); /* full height */
+  background: linear-gradient(180deg, #f1f5f9, #e5edff);
+  border-right: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 22px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+.workspace-main {
+  margin-left: 210px; /* geser seperti Home */
+}
+.workspace-menu-wrapper {
+  flex: 1;
+  overflow-y: auto; /* scroll di menu, bukan sidebar */
+  padding-right: 4px;
+}
+
+.workspace-menu {
+  padding: 11px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  transition: 0.25s ease;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.workspace-user {
-  font-weight: 500;
-  color: #1a237e;
-}
-
-.workspace-logout {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.workspace-logout:hover {
-  background-color: #0056b3;
-}
-
-/* ====== LAYOUT ====== */
-.workspace-layout {
-  display: flex;
-  flex: 1;
-  overflow: hidden; /* ❗ batasi scroll di sini */
-  height: calc(100vh - 70px); /* sisakan ruang untuk header */
-}
-
-/* ====== SIDEBAR ====== */
-.workspace-sidebar {
-  width: 220px;
-  background-color: #e9eef9;
-  border-right: 2px solid #c5cae9;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 12px;
-  gap: 8px;
-  box-shadow: inset -1px 0 3px rgba(0, 0, 0, 0.05);
-  flex-shrink: 0;
-  overflow-y: auto; /* hanya sidebar yg bisa scroll sendiri */
-}
-
-.workspace-menu {
-  display: block;
-  padding: 10px 14px;
-  border-radius: 8px;
-  color: #333;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.25s ease-in-out;
-}
-
-.workspace-menu:hover {
-  background-color: #007bff;
-  color: white;
-}
-
+.workspace-menu:hover,
 .workspace-menu.active {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.4);
+  transform: translateY(-1px);
 }
 
 .workspace-back {
-  margin-top: auto;
-  background: #1a237e;
+  margin-top: 280px;
+  background: #1e3a8a;
   color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 10px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 999px;
   cursor: pointer;
-  transition: 0.3s;
-  font-weight: 500;
+  border: none;
+  transition: 0.25s ease;
 }
 
 .workspace-back:hover {
-  background-color: #0d47a1;
+  background: #172554;
 }
 
-/* ====== MAIN CONTENT ====== */
+/* MAIN AREA */
 .workspace-main {
   flex: 1;
-  padding: 25px 30px;
-  background-color: #f8faff;
-  overflow-y: auto; /* ✅ hanya area ini yg bisa di-scroll */
-  overflow-x: hidden;
-  height: 100%;
-  scroll-behavior: smooth;
+  padding: 40px;
+  overflow-y: auto;
 }
 
 .workspace-container {
   background: white;
-  border: 2px solid #007bff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
-  min-height: 100%;
+  border-left: 4px solid #2563eb;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+  animation: fadeInUp 0.35s ease-out;
 }
 
 .workspace-title {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 600;
-  color: #1a237e;
-  margin-bottom: 16px;
+  color: #0f172a;
+  margin-bottom: 18px;
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 8px;
 }
 
 .workspace-box {
-  background: #f9fbff;
-  border-radius: 10px;
   padding: 20px;
-  min-height: 350px;
+  background: #f9fbff;
+  border-radius: 14px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.03);
+  min-height: 300px;
 }
 
-/* ====== RESPONSIVE ====== */
-@media (max-width: 992px) {
-  .workspace-layout {
-    flex-direction: column;
-    height: auto;
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-
-  .workspace-sidebar {
-    flex-direction: row;
-    width: 100%;
-    border-right: none;
-    border-bottom: 2px solid #c5cae9;
-    justify-content: space-evenly;
-  }
-
-  .workspace-menu {
-    flex: 1;
-    text-align: center;
-  }
-
-  .workspace-main {
-    height: auto;
-    padding: 15px;
-    overflow-y: visible;
-  }
-}
-
-@media (max-width: 600px) {
-  .workspace-header h2 {
-    font-size: 15px;
-  }
-
-  .workspace-logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  .workspace-title {
-    font-size: 16px;
-  }
-
-  .workspace-container {
-    padding: 15px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

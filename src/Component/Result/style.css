@@ -1,230 +1,351 @@
-/* ============================= */
-/*        RESULT CONTAINER       */
-/* ============================= */
+/* ==========================================================
+   🧮 MOORA PAGE — ULTRA PREMIUM EDITION
+========================================================== */
 
+/* WRAPPER PREMIUM */
 .result-container {
-  background: #fff;
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  animation: fadeIn 0.3s ease-in-out;
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
+  border-left: 4px solid #2563eb;
+  animation: fadeInUp 0.35s ease-out;
+  margin-top: 15px;
 }
 
+/* TITLE */
 .result-title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
-  color: #1a237e;
-  margin-bottom: 20px;
+  color: #0f172a;
+  margin-bottom: 8px;
 }
 
-/* Tombol Hitung MOORA */
+.result-container p {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 18px;
+}
+
+/* ==========================================================
+   PREMIUM BUTTON (Calculate)
+========================================================== */
+
 .add-criteria-toggle {
-  background: #2e7d32;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 12px 22px;
+  border-radius: 14px;
   cursor: pointer;
-  font-weight: 500;
-  margin-bottom: 20px;
-  transition: all 0.2s;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  margin-bottom: 28px;
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.3);
 }
 
 .add-criteria-toggle:hover {
-  background: #256528;
+  transform: translateY(-3px);
+  opacity: 0.95;
 }
 
+/* Disabled state */
 .add-criteria-toggle:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.table-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin: 25px 0 10px 0;
-}
-
-/* ============================= */
-/*        GLOBAL TABLE STYLE     */
-/* ============================= */
-
-.data-table.moora {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.data-table.moora th,
-.data-table.moora td {
-  padding: 10px 14px;
-  text-align: center;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-}
-
-.data-table.moora th {
-  background: #004aad; /* Samakan semua header table */
-  color: white;
-  font-weight: 600;
-}
-
-.data-table.moora tr:hover td {
-  background: #f3f6ff;
-}
-
-/* Highlight ranking 1 */
-.gold-row {
-  background: #fff8e1 !important;
-  font-weight: bold;
-  border-left: 4px solid #ffc107;
-}
-
-/* ============================= */
-/*        VOTING BUTTONS         */
-/* ============================= */
-
-.vote-btn {
-  padding: 6px 14px;
-  background: #004aad; /* biru tema */
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
-  font-size: 13px;
-  font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.vote-btn:hover {
-  background: #003780;
-  transform: translateY(-1px);
-}
-
-.vote-btn:disabled {
-  background: #7d7d7d;
-  cursor: not-allowed;
-  box-shadow: none;
   transform: none;
 }
 
-/* Sudah memilih */
-.voted-label {
-  color: #1e7d36;
-  background: #e9f8ef;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid #1e7d36;
+/* Section Title */
+.table-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 26px 0 12px 0;
+  color: #0f172a;
 }
 
-/* Tombol unvote */
-.unvote-btn {
-  margin-top: 5px;
-  padding: 5px 12px;
-  background: #e53935;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  font-size: 12px;
-  transition: 0.2s;
-}
+/* ==========================================================
+   GLOBAL TABLE — FLOATING MODERN UI
+========================================================== */
 
-.unvote-btn:hover {
-  background: #c62828;
-}
-
-.vote-actions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ============================= */
-/*          GRAFIK VOTING        */
-/* ============================= */
-
-.voting-graphs {
-  display: flex;
-  gap: 40px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.voting-graphs > div {
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* ============================= */
-/*         VOTE RESULT TABLE     */
-/* ============================= */
-
-.vote-result-table {
+.data-table.moora {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0 11px;
+  margin-bottom: 25px;
 }
 
-.vote-result-table th {
-  background: #004aad;
-  color: #fff;
-  padding: 10px;
+.data-table.moora th {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 14px;
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  box-shadow: none;
 }
 
-.vote-result-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
+.data-table.moora td {
+  background: white;
+  padding: 14px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.07);
+  transition: 0.25s ease;
 }
 
-/* ============================= */
-/*        RESPONSIVE STYLE       */
-/* ============================= */
-
-@media (max-width: 768px) {
-  .data-table.moora th,
-  .data-table.moora td {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .result-container {
-    padding: 15px;
-  }
-
-  .table-title {
-    font-size: 14px;
-  }
-
-  .voting-graphs {
-    flex-direction: column;
-    align-items: center;
-  }
+/* Hover Row */
+.data-table.moora tr:hover td {
+  background: #eef4ff;
+  transform: translateY(-3px);
 }
 
-/* Fade In Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+/* ==========================================================
+   FINAL TABLE — RANKING + VOTING
+========================================================== */
+
 .result-final td:nth-child(4) {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Highlight Rank 1 */
+.gold-row {
+  background: #fff8dc !important;
+  border-left: 4px solid #f59e0b;
+  font-weight: 700;
+}
+
+/* Voting Button */
+/* Tombol aktif */
+.vote-btn {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+
+.vote-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+/* 🎯 UX untuk tombol yang TIDAK bisa ditekan */
+.vote-btn-disabled,
+.vote-btn:disabled {
+  background: #cbd5e1 !important; /* abu premium */
+  color: #64748b !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Tambahan efek frost (opsional) */
+.vote-btn-disabled {
+  backdrop-filter: blur(1px);
+}
+
+/* Sudah vote */
+.voted-label {
+  background: #e8fff0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #16a34a;
+  color: #15803d;
+}
+
+/* Unvote */
+.unvote-btn {
+  background: #ef4444;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.unvote-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Voting Actions */
+.vote-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==========================================================
+   VOTING GRAPHS CARD
+========================================================== */
+
+.voting-graphs {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.voting-graphs > div {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================
+   RESPONSIVE PREMIUM
+========================================================== */
+
+@media (max-width: 768px) {
+  .result-container {
+    padding: 20px;
+  }
+
+  .add-criteria-toggle {
+    width: 100%;
+    text-align: center;
+  }
+
+  .data-table.moora th,
+  .data-table.moora td {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ============================= */
+/* PREMIUM SCROLL WRAPPER       */
+/* ============================= */
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 8px; /* space untuk scrollbar */
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #2563eb;
+  border-radius: 10px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #1e3a8a;
+}
+/* ============================================
+   UX — Ketika user sudah memilih
+============================================ */
+
+.vote-selected-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #e8f5ff;
+  border: 1px solid #93c5fd;
+  padding: 10px 14px;
+  border-radius: 12px;
+  width: fit-content;
+  margin: auto;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  animation: fadeInSmooth 0.25s ease-out;
+}
+
+.vote-selected-icon {
+  background: #2563eb;
+  color: white;
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vote-selected-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+/* unvote premium */
+.unvote-btn-premium {
+  padding: 6px 12px;
+  background: #ef4444;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.unvote-btn-premium:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* voting closed */
+.voted-closed {
+  background: #fff4d1 !important;
+  border: 1px solid #facc15 !important;
+  color: #b45309 !important;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Smooth animation */
+@keyframes fadeInSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

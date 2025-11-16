@@ -1,146 +1,141 @@
-.result-container {
-  background: #fff;
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.result-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1a237e;
-  margin-bottom: 20px;
-}
-
-/* Tombol Hitung */
-.add-criteria-toggle {
-  background: #2e7d32;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  margin-bottom: 20px;
-  transition: all 0.2s;
-}
-
-.add-criteria-toggle:hover {
-  background: #256528;
-}
-
-.add-criteria-toggle:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.table-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin: 25px 0 10px 0;
-}
-
-.data-table.moora {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.data-table.moora th,
-.data-table.moora td {
-  padding: 10px 14px;
-  text-align: center;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-}
-
-.data-table.moora th {
-  background: #004aad;
-  color: white;
-  font-weight: 600;
-}
-
-.data-table.moora tr:hover td {
-  background: #f3f6ff;
-}
-
-.gold-row {
-  background: #fff8e1 !important;
-  font-weight: bold;
-  border-left: 4px solid #ffc107;
-}
-
-/* Animasi Fade In */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Responsif */
-@media (max-width: 768px) {
-  .data-table.moora th,
-  .data-table.moora td {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .result-container {
-    padding: 15px;
-  }
-
-  .table-title {
-    font-size: 14px;
-  }
-}
-.voting-graphs {
-  display: flex;
-  gap: 40px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-
-.vote-btn {
-  padding: 5px 12px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.vote-btn:disabled {
-  cursor: not-allowed;
-}
-
-.voted-label {
-  color: green;
-  font-weight: bold;
-}
+/* ==========================================================
+   Voting Result — ULTRA PREMIUM (Match page MOORA & Criteria)
+========================================================== */
 
 .voting-result-wrapper {
-  padding: 20px;
-}
-
-.vote-result-table {
-  width: 100%;
-  border-collapse: collapse;
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
+  border-left: 4px solid #2563eb;
+  animation: fadeInUp 0.35s ease-out;
   margin-top: 20px;
 }
 
-.vote-result-table th {
-  background: #dadada;
-  padding: 10px;
+/* PAGE TITLES */
+.voting-result-wrapper h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.vote-result-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
+.voting-result-wrapper h4 {
+  margin-top: -4px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* PREMIUM BUTTON (Export PDF) */
+.add-criteria-toggle {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  margin: 24px 0 28px 0;
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.3);
+}
+
+.add-criteria-toggle:hover {
+  transform: translateY(-3px);
+  opacity: 0.95;
+}
+
+/* CHART WRAPPER — match style premium */
+.chart-box {
+  background: white;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.07);
+  margin-bottom: 32px;
+}
+
+/* PREMIUM TABLE STYLE (MATCH MOORA) */
+.vote-result-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  margin-top: 20px;
+}
+
+.vote-result-table thead tr th {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px 12px 0 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.vote-result-table tbody tr td {
+  background: white;
+  padding: 16px;
+  font-size: 14px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  transition: 0.25s ease;
+}
+
+.vote-result-table tbody tr:hover td {
+  background: #eef4ff;
+  transform: translateY(-3px);
+}
+
+/* EMPTY STATE */
+.vote-result-table .empty {
+  text-align: center;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* REMOVE ANY GOLD COLOR (SAMA KAYAK VOTING DI MOORA) */
+.vote-result-table .gold-row {
+  background: white !important;
+  border-left: none !important;
+  font-weight: normal !important;
+}
+
+/* ANIMATION */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .voting-result-wrapper {
+    padding: 22px;
+  }
+
+  .add-criteria-toggle {
+    width: 100%;
+    text-align: center;
+  }
+
+  .vote-result-table tbody tr td,
+  .vote-result-table thead tr th {
+    padding: 10px;
+    font-size: 12px;
+  }
 }

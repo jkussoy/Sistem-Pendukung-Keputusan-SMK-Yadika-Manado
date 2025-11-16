@@ -330,42 +330,31 @@ const MOORA = () => {
             decimals={4}
           />
 
-          <h4 className="table-title">4️⃣ Hasil Akhir + Voting</h4>
-          <FinalTable
-            data={results.ranked}
-            onVote={handleVote}
-            userVote={userVote}
-            voteCount={voteCount}
-            userRole={userRole}
-            onUnvote={handleUnvote}
-            votingClosed={votingClosed}
-          />
+          <h4 className="table-title">🏆 Hasil Akhir MOORA</h4>
+          <div className="table-scroll">
+            <FinalTable
+              data={results.ranked}
+              showOnly="result" // 👈 tampilkan Yi & ranking
+              voteMode="hidden" // 👈 sembunyikan voting
+            />
+          </div>
 
-          <h4 className="table-title">📊 Grafik Voting</h4>
-          <div className="voting-graphs">
-            <BarChart width={600} height={300} data={votingChartData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="votes" />
-            </BarChart>
-
-            <PieChart width={350} height={300}>
-              <Pie
-                data={votingChartData}
-                dataKey="votes"
-                cx="50%"
-                cy="50%"
-                outerRadius={90}
-                label
-              >
-                {votingChartData.map((_, i) => (
-                  <Cell key={i} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+          {/* ============================== */}
+          {/* CARD 2 — VOTING ALTERNATIF     */}
+          {/* ============================== */}
+          <h4 className="table-title">🗳️ Voting Alternatif</h4>
+          <div className="table-scroll">
+            <FinalTable
+              data={results.ranked}
+              showOnly="vote" // 👈 tampilkan voting saja
+              voteMode="active" // 👈 aktifkan tombol voting
+              onVote={handleVote}
+              onUnvote={handleUnvote}
+              userVote={userVote}
+              userRole={userRole}
+              voteCount={voteCount}
+              votingClosed={votingClosed}
+            />
           </div>
         </>
       )}
@@ -402,59 +391,84 @@ const Table = ({ data, headers, decimals = 2 }) => (
 /* =====================================================
    TABEL FINAL (AMAN DARI ERROR)
    ===================================================== */
+/* =====================================================
+   FINAL TABLE — SUPPORT 2 MODES (RESULT / VOTING)
+===================================================== */
 const FinalTable = ({
   data,
+  showOnly = "result", // "result" | "vote"
+  voteMode = "hidden", // "active" | "hidden"
   onVote,
-  userVote,
-  voteCount,
-  userRole,
   onUnvote,
+  userVote,
+  userRole,
+  voteCount = {},
   votingClosed,
 }) => (
   <table className="data-table moora result-final">
     <thead>
       <tr>
         <th>Alternatif</th>
-        <th>Nilai Yi</th>
-        <th>Ranking</th>
-        <th>Voting</th>
-        <th>Total Suara</th>
+
+        {showOnly !== "vote" && <th>Nilai Yi</th>}
+        {showOnly !== "vote" && <th>Ranking</th>}
+
+        {showOnly !== "result" && <th>Voting</th>}
+        {showOnly !== "result" && userRole === "operator" && (
+          <th>Total Suara</th>
+        )}
       </tr>
     </thead>
+
     <tbody>
       {data.map((r, i) => {
         const votes = voteCount?.[r.altId] || 0;
 
         return (
-          <tr key={i} className={r.rank === 1 ? "gold-row" : ""}>
+          <tr
+            key={i}
+            className={showOnly === "result" && r.rank === 1 ? "gold-row" : ""}
+          >
             <td>{`${r.code} - ${r.name}`}</td>
-            <td>{r.score.toFixed(4)}</td>
-            <td>🏅 {r.rank}</td>
 
-            <td>
-              {userRole === "operator" ? (
-                <span>-</span>
-              ) : votingClosed ? (
-                <span className="voted-label">Voting Ditutup</span>
-              ) : userVote === r.altId ? (
-                <div className="vote-actions">
-                  <span className="voted-label">✔ Dipilih</span>
-                  <button className="unvote-btn" onClick={onUnvote}>
-                    Batalkan
+            {showOnly !== "vote" && <td>{r.score.toFixed(4)}</td>}
+            {showOnly !== "vote" && <td>🏅 {r.rank}</td>}
+
+            {showOnly !== "result" && (
+              <td>
+                {voteMode === "hidden" ? (
+                  "-"
+                ) : userRole === "operator" ? (
+                  <span>-</span>
+                ) : votingClosed ? (
+                  <span className="voted-label voted-closed">
+                    Voting Ditutup
+                  </span>
+                ) : userVote === r.altId ? (
+                  <div className="vote-selected-card">
+                    <span className="vote-selected-icon">✔</span>
+                    <span className="vote-selected-text">Kamu memilih ini</span>
+                    <button className="unvote-btn-premium" onClick={onUnvote}>
+                      Batalkan
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className={`vote-btn 
+    ${userVote && userVote !== r.altId ? "vote-btn-disabled" : ""}
+  `}
+                    onClick={() => onVote(r.altId)}
+                    disabled={!!userVote || votingClosed}
+                  >
+                    Pilih
                   </button>
-                </div>
-              ) : (
-                <button
-                  className="vote-btn"
-                  onClick={() => onVote(r.altId)}
-                  disabled={!!userVote || votingClosed}
-                >
-                  Pilih
-                </button>
-              )}
-            </td>
+                )}
+              </td>
+            )}
 
-            <td>{votes}</td>
+            {showOnly !== "result" && userRole === "operator" && (
+              <td>{votes}</td>
+            )}
           </tr>
         );
       })}

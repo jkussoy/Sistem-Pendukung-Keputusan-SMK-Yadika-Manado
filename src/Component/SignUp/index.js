@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(null);
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(""); // operator / teacher / student
   const [message, setMessage] = useState("");
@@ -18,6 +19,22 @@ const SignUp = () => {
   const handleSignUp = async () => {
     if (!name || !email || !password || !role) {
       setMessage("⚠️ Semua field wajib diisi!");
+      setStatus("error");
+      return;
+    }
+
+    // Validasi email Gmail saja
+    if (!validateStrictGmail(email)) {
+      setMessage(
+        "⚠️ Gunakan email Gmail yang valid! Contoh: nama123@gmail.com (minimal 4 karakter, tidak boleh mulai angka, tidak boleh ada simbol aneh)"
+      );
+      setStatus("error");
+      return;
+    }
+
+    // Password minimal 6 karakter
+    if (password.length < 6) {
+      setMessage("⚠️ Password minimal 6 karakter!");
       setStatus("error");
       return;
     }
@@ -52,6 +69,24 @@ const SignUp = () => {
       setMessage("❌ Error: " + error.message);
     }
   };
+  const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  };
+  const validateGmail = (email) => {
+    const pattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    return pattern.test(email);
+  };
+  const validateStrictGmail = (email) => {
+    const pattern = /^[a-zA-Z][a-zA-Z0-9._+-]{3,}@(gmail)\.com$/;
+
+    if (email.includes("..")) return false;
+
+    const username = email.split("@")[0];
+    if (!/[a-zA-Z]/.test(username)) return false;
+
+    return pattern.test(email);
+  };
 
   return (
     <div className="login-container">
@@ -60,6 +95,9 @@ const SignUp = () => {
 
         <h2>BUAT AKUN BARU</h2>
         <p>Hanya Operator dapat membuat akun</p>
+        {message && (
+          <div className={`notif-message ${status} fade-in`}>{message}</div>
+        )}
 
         <label>Nama Lengkap</label>
         <input
@@ -103,8 +141,6 @@ const SignUp = () => {
         <button className="login-btn" onClick={handleSignUp}>
           SIGN UP
         </button>
-
-        {message && <p className={`notif-message ${status}`}>{message}</p>}
 
         <p className="signin-text">
           Kembali ke login? <a href="/login">Klik di sini</a>

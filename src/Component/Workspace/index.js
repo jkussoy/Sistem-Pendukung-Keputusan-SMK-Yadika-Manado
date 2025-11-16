@@ -4,15 +4,49 @@ import { db } from "../../Config/Firebase";
 import { ref, onValue } from "firebase/database";
 import Logo from "../../Assets/Image/Logo.png";
 import "./style.css";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const Workspace = () => {
   const { agendaId } = useParams();
   const [agenda, setAgenda] = useState(null);
   const [username, setUsername] = useState("");
-  const [userRole, setUserRole] = useState(""); // ROLE HERE
+  const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
 
-  // Ambil data user & data agenda dari Firebase
+  /* ============================
+        LOAD USER + AGENDA
+  ============================ */
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    // Ambil nama dari Firebase Auth
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsername(user.displayName || user.email || "User");
+      }
+    });
+
+    // Ambil role dari localStorage
+    const storedRole = localStorage.getItem("userRole");
+    if (storedRole) setUserRole(storedRole);
+
+    // Load agenda
+    const agendaRef = ref(db, `agendas/${agendaId}`);
+    const unsubscribeAgenda = onValue(agendaRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setAgenda({ id: agendaId, ...snapshot.val() });
+      } else {
+        setAgenda(null);
+      }
+    });
+
+    return () => {
+      unsub();
+      unsubscribeAgenda();
+    };
+  }, [agendaId]);
+
   useEffect(() => {
     const storedName = localStorage.getItem("teacherName");
     const storedRole = localStorage.getItem("userRole");
@@ -21,41 +55,66 @@ const Workspace = () => {
     if (storedRole) setUserRole(storedRole);
 
     const agendaRef = ref(db, `agendas/${agendaId}`);
-    const unsubscribe = onValue(agendaRef, (snapshot) => {
+    return onValue(agendaRef, (snapshot) => {
       if (snapshot.exists()) {
         setAgenda({ id: agendaId, ...snapshot.val() });
-      } else {
-        setAgenda(null);
-      }
+      } else setAgenda(null);
     });
-
-    return () => unsubscribe();
   }, [agendaId]);
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/landing-page");
+    const auth = getAuth();
+
+    signOut(auth)
+      .then(() => {
+        localStorage.clear(); // pastikan role & nama juga dibersihkan
+        navigate("/landing-page");
+      })
+      .catch((error) => {
+        console.error("Logout gagal:", error);
+      });
   };
 
   return (
     <div className="workspace-wrapper">
-      {/* HEADER */}
+      {/* HEADER — SAME STYLE AS HOME */}
       <header className="workspace-header">
         <div className="workspace-left">
-          <img src={Logo} alt="Logo Sekolah" className="workspace-logo" />
-          <h2>Sistem Pendukung Keputusan SMK Yadika Manado</h2>
+          <div className="workspace-logo-wrap">
+            <img src={Logo} alt="Logo" className="workspace-logo" />
+          </div>
+
+          <div className="workspace-title-text">
+            <h2>Sistem Pendukung Keputusan</h2>
+            <span className="workspace-sub">SMK Yadika Manado</span>
+          </div>
         </div>
+
         <div className="workspace-right">
-          <span className="workspace-user">{username}</span>
+          <div className="workspace-user-meta">
+            <span className="workspace-username">{username}</span>
+
+            <span
+              className={`workspace-role-pill ${
+                userRole === "operator"
+                  ? "role-operator"
+                  : userRole === "teacher"
+                  ? "role-teacher"
+                  : "role-student"
+              }`}
+            >
+              {userRole}
+            </span>
+          </div>
+
           <button className="workspace-logout" onClick={handleLogout}>
-            Log Out
+            Keluar
           </button>
         </div>
       </header>
 
-      {/* CONTENT */}
       <div className="workspace-layout">
-        {/* SIDEBAR */}
+        {/* SIDEBAR — MATCH HOME DESIGN */}
         <aside className="workspace-sidebar">
           {userRole === "operator" && (
             <NavLink
@@ -68,7 +127,6 @@ const Workspace = () => {
             </NavLink>
           )}
 
-          {/* Semua role */}
           <NavLink
             to={`/workspace/${agendaId}/workspacehome`}
             end
@@ -79,7 +137,6 @@ const Workspace = () => {
             🏠 Home
           </NavLink>
 
-          {/* Criteria — operator only */}
           {userRole === "operator" && (
             <NavLink
               to={`/workspace/${agendaId}/criteria`}
@@ -91,7 +148,6 @@ const Workspace = () => {
             </NavLink>
           )}
 
-          {/* Alternative — semua role */}
           <NavLink
             to={`/workspace/${agendaId}/alternatives`}
             className={({ isActive }) =>
@@ -101,7 +157,6 @@ const Workspace = () => {
             🧩 Alternative
           </NavLink>
 
-          {/* Weighting — semua role boleh */}
           <NavLink
             to={`/workspace/${agendaId}/weighting`}
             className={({ isActive }) =>
@@ -111,7 +166,6 @@ const Workspace = () => {
             ⚖️ Weight
           </NavLink>
 
-          {/* Result — semua role */}
           <NavLink
             to={`/workspace/${agendaId}/result`}
             className={({ isActive }) =>
@@ -121,20 +175,22 @@ const Workspace = () => {
             🏁 Result
           </NavLink>
 
-          <button className="workspace-back" onClick={() => navigate("/home")}>
+          <button
+            className="workspace-menu active"
+            onClick={() => navigate("/home")}
+          >
             ⬅️ Kembali ke Home
           </button>
         </aside>
 
         {/* MAIN */}
         <main className="workspace-main">
-          <div className="workspace-container">
+          <div className="workspace-container card-animated">
             <h3 className="workspace-title">
-              Selamat Datang di Sistem Pendukung Keputusan SMK Yadika Manado
+              Workspace Agenda — {agenda?.topic || "Loading..."}
             </h3>
 
             <div className="workspace-box">
-              {/* Pass role ke semua halaman */}
               <Outlet context={{ agendaId, agenda, userRole }} />
             </div>
           </div>

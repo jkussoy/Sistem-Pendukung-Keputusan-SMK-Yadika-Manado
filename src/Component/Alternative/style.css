@@ -1,233 +1,277 @@
 /* =====================================================
-   🧮 ALTERNATIVE PAGE STYLE
+   🧮 ALTERNATIVE PAGE — ULTRA PREMIUM EDITION v2
 ===================================================== */
+
+/* WRAPPER CARD */
 .alt-wrapper {
-  background: #f9fbff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  border-left: 4px solid #2563eb;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  animation: fadeInUp 0.4s ease-out;
 }
 
 /* HEADER */
 .alt-header h2 {
-  color: #1a237e;
-  margin-bottom: 6px;
-  font-size: 22px;
+  color: #0f172a;
+  margin-bottom: 8px;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .alt-header p {
-  color: #555;
-  margin-bottom: 20px;
-  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 24px;
+  font-size: 15px;
 }
 
-/* TOGGLE FORM BUTTON */
+/* =====================================================
+   PREMIUM BUTTON
+===================================================== */
 .btn-toggle-form {
-  background: #007bff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 14px;
   cursor: pointer;
-  margin-bottom: 15px;
-  font-weight: 500;
-  transition: 0.2s;
-  width: fit-content;
+  margin-bottom: 22px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  display: inline-block;
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.3);
 }
 
 .btn-toggle-form:hover {
-  background: #0056b3;
+  transform: translateY(-3px);
+  opacity: 0.95;
 }
 
-/* FORM */
+/* =====================================================
+   PREMIUM FORM CARD
+===================================================== */
 .alt-form {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  border: 1px solid #cfd8dc;
-  margin-bottom: 25px;
+  background: #f9faff;
+  border-radius: 18px;
+  padding: 26px;
+  border: 1px solid #dbe4ff;
+  margin-bottom: 30px;
+  box-shadow: 0 14px 30px rgba(100, 116, 139, 0.1);
+  animation: fadeIn 0.35s ease;
 }
 
 .alt-form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
+/* INPUT GROUP */
 .form-group label {
   font-weight: 600;
-  margin-bottom: 4px;
-  color: #1a237e;
-  font-size: 13px;
+  color: #1e3a8a;
+  margin-bottom: 6px;
+  font-size: 14px;
 }
 
 .form-group input {
-  padding: 8px;
-  border: 1px solid #cfd8dc;
-  border-radius: 6px;
+  padding: 12px;
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
   font-size: 14px;
-  transition: 0.2s;
+  background: white;
+  transition: 0.25s ease;
+  height: 45px;
 }
 
 .form-group input:focus {
-  border-color: #007bff;
+  border-color: #2563eb;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
+/* SUBMIT BUTTON */
 .form-submit {
   display: flex;
   justify-content: flex-end;
-  margin-top: 15px;
+  margin-top: 14px;
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
   color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
+  padding: 12px 26px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: 0.2s;
+  border: none;
+  font-weight: 600;
+  transition: 0.25s ease;
+  box-shadow: 0 12px 28px rgba(30, 64, 175, 0.3);
+  font-size: 15px;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  transform: translateY(-3px);
+  opacity: 0.9;
 }
 
-/* TABLE */
+/* =====================================================
+   KODE KRITERIA BOX (C1, C2, C3)
+===================================================== */
+.criteria-notes-box {
+  background: #f4f7ff;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid #c7d2fe;
+  margin: 30px 0;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+}
+
+.criteria-notes-box h4 {
+  margin-bottom: 14px;
+  font-size: 17px;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notes-table th {
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 10px 10px 0 0;
+}
+
+.notes-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+/* =====================================================
+   MODERN FLOATING TABLE (MAIN MATRIX)
+===================================================== */
 .alt-table-section {
-  margin-top: 20px;
+  margin-top: 24px;
   overflow-x: auto;
 }
 
 .criteria-table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 8px;
-  min-width: 700px;
+  border-spacing: 0 15px;
+  min-width: 780px;
 }
 
+/* TABLE HEADER */
 .criteria-table th {
-  background: #007bff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
-  padding: 10px;
-  border-radius: 6px 6px 0 0;
-  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
   font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
+/* ROWS */
 .criteria-table td {
   background: white;
+  padding: 14px;
   text-align: center;
-  padding: 8px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.25s ease;
   font-size: 14px;
 }
 
 .criteria-table tr:hover td {
-  background: #eef6ff;
+  background: #eef5ff;
+  transform: translateY(-3px);
 }
 
+/* EDIT INPUT */
 .editable-input {
-  border: none;
-  background: transparent;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
   text-align: center;
-  width: 80px;
+  width: 90px;
+  padding: 8px;
+  border-radius: 10px;
+  transition: 0.25s ease;
 }
 
 .editable-input:focus {
-  background: #eef6ff;
-  border: 1px solid #007bff;
-  border-radius: 4px;
+  background: #eef4ff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
   outline: none;
 }
 
+/* DELETE BUTTON */
 .btn-delete {
-  background: #e53935;
+  background: #ef4444;
   color: white;
   border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.25s ease;
+  font-size: 14px;
 }
 
 .btn-delete:hover {
-  background: #c62828;
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.25);
 }
 
+/* EMPTY STATE */
 .empty {
-  color: #777;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 18px;
   font-style: italic;
-  background: #fafafa;
-  border-radius: 6px;
-  text-align: center;
-  padding: 10px 0;
+  color: #94a3b8;
 }
 
-/* RESPONSIVE DESIGN */
-
-/* Tablet (≤ 992px) */
-@media (max-width: 992px) {
-  .alt-wrapper {
-    padding: 20px;
+/* =====================================================
+   ANIMATION
+===================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-
-  .alt-header h2 {
-    font-size: 20px;
-  }
-
-  .alt-form-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .criteria-table th,
-  .criteria-table td {
-    font-size: 13px;
-    padding: 6px 8px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Mobile (≤ 768px) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 @media (max-width: 768px) {
   .alt-wrapper {
-    padding: 15px;
-  }
-
-  .alt-header h2 {
-    font-size: 18px;
-  }
-
-  .alt-form {
-    padding: 15px;
-  }
-
-  .alt-form-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .alt-table-section {
-    overflow-x: auto;
-  }
-
-  .criteria-table {
-    min-width: 650px;
-    font-size: 13px;
-  }
-
-  .editable-input {
-    width: 60px;
+    padding: 22px;
   }
 
   .btn-primary,
@@ -237,53 +281,8 @@
   }
 }
 
-/* Very small (≤ 480px) */
 @media (max-width: 480px) {
-  .alt-wrapper {
-    padding: 10px;
-  }
-
-  .alt-header h2 {
-    font-size: 16px;
-  }
-
-  .criteria-table th,
-  .criteria-table td {
-    font-size: 12px;
-    padding: 6px;
-  }
-
   .editable-input {
-    width: 50px;
+    width: 55px;
   }
-}
-.criteria-notes-box {
-  background: #f8f9fa;
-  padding: 15px;
-  margin: 20px 0;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.criteria-notes-box h4 {
-  margin-bottom: 10px;
-}
-
-.notes-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.notes-table th {
-  background: #007bff;
-  padding: 8px;
-  text-align: left;
-  color: white;
-  border-bottom: 2px solid #ccc;
-}
-
-.notes-table td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
 }
