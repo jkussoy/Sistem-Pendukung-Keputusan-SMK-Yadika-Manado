@@ -1,0 +1,89 @@
+.audit-wrapper {
+  padding: 25px;
+  font-family: "Poppins";
+}
+
+.audit-title {
+  font-size: 22px;
+  color: #0d47a1;
+  border-bottom: 2px solid #2196f3;
+  padding-bottom: 6px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.audit-empty {
+  background: #e3f2fd;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: #0d47a1;
+  font-size: 16px;
+}
+
+.audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.audit-item {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #2196f3;
+}
+
+.audit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.log-badge {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* warna per aksi */
+.log-badge.create_agenda {
+  background: #4caf50;
+}
+.log-badge.delete_agenda {
+  background: #e53935;
+}
+.log-badge.close_voting {
+  background: #ff9800;
+}
+.log-badge.open_voting {
+  background: #03a9f4;
+}
+.log-badge.user_vote {
+  background: #7b1fa2;
+}
+.log-badge.reset {
+  background: #9e9e9e;
+}
+
+.log-info {
+  flex: 1;
+}
+
+.log-detail {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.log-meta {
+  font-size: 13px;
+  color: #555;
+}

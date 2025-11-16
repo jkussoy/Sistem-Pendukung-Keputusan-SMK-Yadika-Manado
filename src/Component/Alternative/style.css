@@ -1,0 +1,288 @@
+/* =====================================================
+   🧮 ALTERNATIVE PAGE — ULTRA PREMIUM EDITION v2
+===================================================== */
+
+/* WRAPPER CARD */
+.alt-wrapper {
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  border-left: 4px solid #2563eb;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* HEADER */
+.alt-header h2 {
+  color: #0f172a;
+  margin-bottom: 8px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.alt-header p {
+  color: #64748b;
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+/* =====================================================
+   PREMIUM BUTTON
+===================================================== */
+.btn-toggle-form {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-bottom: 22px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  display: inline-block;
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.3);
+}
+
+.btn-toggle-form:hover {
+  transform: translateY(-3px);
+  opacity: 0.95;
+}
+
+/* =====================================================
+   PREMIUM FORM CARD
+===================================================== */
+.alt-form {
+  background: #f9faff;
+  border-radius: 18px;
+  padding: 26px;
+  border: 1px solid #dbe4ff;
+  margin-bottom: 30px;
+  box-shadow: 0 14px 30px rgba(100, 116, 139, 0.1);
+  animation: fadeIn 0.35s ease;
+}
+
+.alt-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* INPUT GROUP */
+.form-group label {
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
+  font-size: 14px;
+  background: white;
+  transition: 0.25s ease;
+  height: 45px;
+}
+
+.form-group input:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* SUBMIT BUTTON */
+.form-submit {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  color: white;
+  padding: 12px 26px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: 0.25s ease;
+  box-shadow: 0 12px 28px rgba(30, 64, 175, 0.3);
+  font-size: 15px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+/* =====================================================
+   KODE KRITERIA BOX (C1, C2, C3)
+===================================================== */
+.criteria-notes-box {
+  background: #f4f7ff;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid #c7d2fe;
+  margin: 30px 0;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+}
+
+.criteria-notes-box h4 {
+  margin-bottom: 14px;
+  font-size: 17px;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notes-table th {
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 10px 10px 0 0;
+}
+
+.notes-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+/* =====================================================
+   MODERN FLOATING TABLE (MAIN MATRIX)
+===================================================== */
+.alt-table-section {
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+.criteria-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 15px;
+  min-width: 780px;
+}
+
+/* TABLE HEADER */
+.criteria-table th {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* ROWS */
+.criteria-table td {
+  background: white;
+  padding: 14px;
+  text-align: center;
+  border-radius: 14px;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.25s ease;
+  font-size: 14px;
+}
+
+.criteria-table tr:hover td {
+  background: #eef5ff;
+  transform: translateY(-3px);
+}
+
+/* EDIT INPUT */
+.editable-input {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  text-align: center;
+  width: 90px;
+  padding: 8px;
+  border-radius: 10px;
+  transition: 0.25s ease;
+}
+
+.editable-input:focus {
+  background: #eef4ff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  outline: none;
+}
+
+/* DELETE BUTTON */
+.btn-delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-size: 14px;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.25);
+}
+
+/* EMPTY STATE */
+.empty {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 18px;
+  font-style: italic;
+  color: #94a3b8;
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media (max-width: 768px) {
+  .alt-wrapper {
+    padding: 22px;
+  }
+
+  .btn-primary,
+  .btn-toggle-form {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .editable-input {
+    width: 55px;
+  }
+}
