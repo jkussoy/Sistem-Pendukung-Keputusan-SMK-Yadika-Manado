@@ -4,6 +4,7 @@ import { ref, push, onValue, remove, update, get } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Logo from "./../../Assets/Image/Logo.png";
+import Logo2 from "./../../Assets/Image/Logo02.png";
 import "./style.css";
 import { saveLog } from "../../Utils/savelogs";
 
@@ -107,7 +108,7 @@ const Home = () => {
           <div className="loader-ring"></div>
 
           <div className="loader-logo">
-            <img src={Logo} alt="logo" />
+            <img src={Logo2} alt="logo" />
           </div>
 
           <h3 className="loading-title">Loading Dashboard...</h3>

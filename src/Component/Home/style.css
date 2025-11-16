@@ -1,61 +1,8 @@
-/* ------------------ GENERAL LAYOUT ------------------ */
-.dashboard-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: "Poppins", sans-serif;
-  background: radial-gradient(
-    circle at top left,
-    #e3f2fd 0,
-    #f5f7fb 45%,
-    #eef2ff 100%
-  );
-  color: #1f2933;
-  overflow: hidden;
-}
-
-/* ------------------ LOADING SCREEN ------------------ */
-.loading-screen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #0f172a;
-}
-
-.loading-card {
-  background: #0b1120;
-  padding: 24px 32px;
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.75);
-  text-align: center;
-}
-
-.loading-card p {
-  color: #e5e7eb;
-  margin-top: 12px;
-  font-size: 14px;
-}
-
-.spinner {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 3px solid rgba(148, 163, 184, 0.4);
-  border-top-color: #38bdf8;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* =========================================================
-   PREMIUM LOADING SCREEN
+   PREMIUM LOADING — CLEAN, FINAL, NO DUPLICATES
    ========================================================= */
+
+/* Fullscreen background */
 .loading-screen-pro {
   height: 100vh;
   width: 100vw;
@@ -66,6 +13,7 @@
   animation: fadeIn 0.4s ease-out;
 }
 
+/* Card (glass effect) */
 .loading-card-pro {
   position: relative;
   width: 260px;
@@ -84,10 +32,10 @@
   width: 54px;
   height: 54px;
   margin-bottom: 14px;
-  animation: pulse 1.8s infinite ease-in-out;
+  animation: pulse 1.6s infinite ease-in-out;
 }
 
-/* Title and subtitle */
+/* Title & Subtitle */
 .loading-title {
   margin-top: 6px;
   font-size: 17px;
@@ -101,35 +49,23 @@
   color: #cbd5e1;
 }
 
-/* Animated ring loader */
+/* Premium spinner ring */
 .loader-ring {
-  width: 58px;
-  height: 58px;
-  border-radius: 999px;
-  margin: 0 auto 18px auto;
-  border: 4px solid transparent;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.12);
   border-top-color: #38bdf8;
   border-right-color: #60a5fa;
-  animation: spin 0.8s linear infinite;
-  box-shadow: 0 0 18px rgba(96, 165, 250, 0.6);
+  animation: spinnerRotate 0.7s linear infinite;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 0 22px rgba(96, 165, 250, 0.35);
 }
 
 /* Animations */
-@keyframes spin {
+@keyframes spinnerRotate {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 1;
   }
 }
 
@@ -152,123 +88,16 @@
     opacity: 1;
   }
 }
-/* ------------------ LOADING SCREEN (PREMIUM V2) ------------------ */
 
-.loading-screen {
-  min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, #0f172a, #020617 70%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Card container */
-.loading-card {
-  width: 330px;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(18px);
-  padding: 32px 28px;
-  border-radius: 18px;
-  text-align: center;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
-  animation: floatCard 3s ease-in-out infinite;
-}
-
-/* Decorative glowing ring */
-.loading-card::before {
-  content: "";
-  position: absolute;
-  inset: -40px;
-  background: conic-gradient(
-    from 0deg,
-    rgba(37, 99, 235, 0.5),
-    rgba(14, 165, 233, 0.4),
-    rgba(37, 99, 235, 0.5)
-  );
-  animation: rotateGlow 4s linear infinite;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.6;
-}
-
-/* Brand Badge */
-.loading-logo-badge {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 18px;
-  background: radial-gradient(circle at 30% 20%, #3b82f6, #1e40af);
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45);
-  z-index: 2;
-  position: relative;
-}
-
-.loading-logo-badge img {
-  width: 32px;
-  height: 32px;
-}
-
-/* Animated spinner */
-.spinner {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto;
-  border-radius: 999px;
-  border: 4px solid rgba(255, 255, 255, 0.18);
-  border-top-color: #38bdf8;
-  animation: spin 0.7s linear infinite;
-  z-index: 2;
-  position: relative;
-}
-
-.loading-text {
-  margin-top: 16px;
-  font-size: 14px;
-  color: #e2e8f0;
-  letter-spacing: 0.5px;
-  z-index: 2;
-  position: relative;
-}
-
-/* --- Animations --- */
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes floatCard {
+@keyframes pulse {
   0%,
   100% {
-    transform: translateY(0);
+    transform: scale(1);
+    opacity: 0.85;
   }
   50% {
-    transform: translateY(-6px);
-  }
-}
-
-@keyframes rotateGlow {
-  to {
-    transform: rotate(360deg);
+    transform: scale(1.15);
+    opacity: 1;
   }
 }
 
@@ -297,14 +126,14 @@
 }
 
 .logo-badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  background: radial-gradient(circle at 30% 0, #60a5fa, #1d4ed8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 999px !important;
+  background: transparent !important; /* atau "white" kalau mau putih */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
 }
 
 .logo-header {
