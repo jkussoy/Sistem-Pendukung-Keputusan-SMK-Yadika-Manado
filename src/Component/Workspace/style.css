@@ -42,8 +42,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #60a5fa, #2563eb);
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+  background: white !important; /* PUTIH */
+  box-shadow: none !important;
 }
 
 .logo-badge {
