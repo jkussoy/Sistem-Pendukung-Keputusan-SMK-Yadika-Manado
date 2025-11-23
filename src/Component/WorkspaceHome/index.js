@@ -158,36 +158,38 @@ const WorkspaceHome = () => {
                 Belum ada hasil pembobotan MEREC. Silakan lakukan perhitungan.
               </p>
             ) : (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Kode</th>
-                    <th>Nama Kriteria</th>
-                    <th>Label</th>
-                    <th>Bobot Akhir</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mergedWeights.map((w, i) => (
-                    <tr key={i}>
-                      <td>{w.code}</td>
-                      <td>{w.name}</td>
-                      <td>
-                        <span
-                          className={`label-chip ${
-                            w.label?.toLowerCase() === "benefit"
-                              ? "benefit"
-                              : "cost"
-                          }`}
-                        >
-                          {w.label}
-                        </span>
-                      </td>
-                      <td>{w.weight}</td>
+              <div className="data-table-wrapper">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Kode</th>
+                      <th>Nama Kriteria</th>
+                      <th>Label</th>
+                      <th>Bobot Akhir</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {mergedWeights.map((w, i) => (
+                      <tr key={i}>
+                        <td>{w.code}</td>
+                        <td>{w.name}</td>
+                        <td>
+                          <span
+                            className={`label-chip ${
+                              w.label?.toLowerCase() === "benefit"
+                                ? "benefit"
+                                : "cost"
+                            }`}
+                          >
+                            {w.label}
+                          </span>
+                        </td>
+                        <td>{w.weight}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
 

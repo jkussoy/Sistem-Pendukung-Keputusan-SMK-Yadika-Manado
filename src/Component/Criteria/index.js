@@ -238,91 +238,94 @@ const Criteria = () => {
       {/* TABLE */}
       <section className="criteria-table-section">
         <h3>📋 Daftar Kriteria</h3>
-
-        <table className="criteria-table">
-          <thead>
-            <tr>
-              <th>Kode</th>
-              <th>Nama</th>
-              <th>Label</th>
-              <th>Bobot Manual</th>
-              <th>Bobot MEREC</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {criteria.length === 0 ? (
+        <div className="criteria-table-wrapper">
+          <table className="criteria-table">
+            <thead>
               <tr>
-                <td colSpan="6" className="empty">
-                  Belum ada kriteria
-                </td>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th>Label</th>
+                <th>Bobot Manual</th>
+                <th>Bobot MEREC</th>
+                <th>Aksi</th>
               </tr>
-            ) : (
-              criteria.map((c, index) => (
-                <tr key={c.id} style={{ "--i": index }}>
-                  <td>
-                    <input
-                      defaultValue={c.code}
-                      onBlur={(e) =>
-                        handleEdit(c.id, "code", e.target.value.toUpperCase())
-                      }
-                      className="editable-input"
-                    />
-                  </td>
+            </thead>
 
-                  <td>
-                    <input
-                      defaultValue={c.name}
-                      onBlur={(e) =>
-                        handleEdit(c.id, "name", e.target.value.trim())
-                      }
-                      className="editable-input"
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      defaultValue={c.label}
-                      onBlur={(e) =>
-                        handleEdit(c.id, "label", e.target.value.trim())
-                      }
-                      className="editable-input"
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      type="number"
-                      step="0.01"
-                      defaultValue={c.weight}
-                      onBlur={(e) => handleEdit(c.id, "weight", e.target.value)}
-                      className="editable-input"
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      type="number"
-                      readOnly
-                      defaultValue={c.autoWeight || 0}
-                      className="editable-input auto-weight"
-                    />
-                  </td>
-
-                  <td>
-                    <button
-                      className="btn-delete"
-                      onClick={() => handleDelete(c.id)}
-                    >
-                      🗑️
-                    </button>
+            <tbody>
+              {criteria.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="empty">
+                    Belum ada kriteria
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                criteria.map((c, index) => (
+                  <tr key={c.id} style={{ "--i": index }}>
+                    <td>
+                      <input
+                        defaultValue={c.code}
+                        onBlur={(e) =>
+                          handleEdit(c.id, "code", e.target.value.toUpperCase())
+                        }
+                        className="editable-input"
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        defaultValue={c.name}
+                        onBlur={(e) =>
+                          handleEdit(c.id, "name", e.target.value.trim())
+                        }
+                        className="editable-input"
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        defaultValue={c.label}
+                        onBlur={(e) =>
+                          handleEdit(c.id, "label", e.target.value.trim())
+                        }
+                        className="editable-input"
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue={c.weight}
+                        onBlur={(e) =>
+                          handleEdit(c.id, "weight", e.target.value)
+                        }
+                        className="editable-input"
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        type="number"
+                        readOnly
+                        defaultValue={c.autoWeight || 0}
+                        className="editable-input auto-weight"
+                      />
+                    </td>
+
+                    <td>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(c.id)}
+                      >
+                        🗑️
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );

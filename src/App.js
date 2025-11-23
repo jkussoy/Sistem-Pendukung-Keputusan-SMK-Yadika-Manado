@@ -17,6 +17,10 @@ import SignUp from "./Component/SignUp/index";
 import VotingResult from "./Component/VotingResult";
 import AuditLogs from "./Component/AuditLogs";
 import Login from "./Component/Login";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ManageAccounts from "./Component/ManageAcounts";
+import ChangePassword from "./Component/ChangePassword";
+import Profile from "./Component/Profile";
 
 function App() {
   return (
@@ -32,6 +36,7 @@ function App() {
 
         {/* HOME */}
         <Route path="/home" element={<Home username="Guru1" />} />
+        <Route path="/manage-accounts" element={<ManageAccounts />} />
 
         {/* WORKSPACE */}
         <Route path="/workspace/:agendaId" element={<Workspace />}>
@@ -48,6 +53,8 @@ function App() {
 
         {/* CATCH-ALL ERROR HANDLING */}
         <Route path="*" element={<Navigate to="/landing-page" replace />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

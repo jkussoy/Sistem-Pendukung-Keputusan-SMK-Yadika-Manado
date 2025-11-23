@@ -113,34 +113,36 @@ const WeightMerec = () => {
       ) : (
         <div className="weight-table-section">
           <h3>📋 Hasil Perhitungan Bobot</h3>
-          <table className="weight-table">
-            <thead>
-              <tr>
-                <th>Kode</th>
-                <th>Nama Kriteria</th>
-                <th>Label</th>
-                <th>Bobot MEREC</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weights.length === 0 ? (
+          <div className="table-scroll">
+            <table className="weight-table">
+              <thead>
                 <tr>
-                  <td colSpan="4" className="empty">
-                    Tekan tombol "Hitung Bobot MEREC" untuk melihat hasil
-                  </td>
+                  <th>Kode</th>
+                  <th>Nama Kriteria</th>
+                  <th>Label</th>
+                  <th>Bobot MEREC</th>
                 </tr>
-              ) : (
-                weights.map((w, i) => (
-                  <tr key={i}>
-                    <td>{w.code}</td>
-                    <td>{criteria.find((c) => c.code === w.code)?.name}</td>
-                    <td>{criteria.find((c) => c.code === w.code)?.label}</td>
-                    <td className="weight-cell">{w.weight}</td>
+              </thead>
+              <tbody>
+                {weights.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="empty">
+                      Tekan tombol "Hitung Bobot MEREC" untuk melihat hasil
+                    </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  weights.map((w, i) => (
+                    <tr key={i}>
+                      <td>{w.code}</td>
+                      <td>{criteria.find((c) => c.code === w.code)?.name}</td>
+                      <td>{criteria.find((c) => c.code === w.code)?.label}</td>
+                      <td className="weight-cell">{w.weight}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

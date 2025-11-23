@@ -71,39 +71,51 @@
 
 .data-table.moora {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 11px;
+  border-collapse: collapse; /* ✅ hilangkan celah capsule */
+  background: white;
+  border-radius: 12px; /* ✅ header jadi satu blok */
+  /* overflow: hidden; ✅ rounded bersih */
   margin-bottom: 25px;
 }
 
 .data-table.moora th {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  ); /* ✅ biru solid seperti MEREC */
   color: white;
   padding: 14px;
-  border-radius: 10px 10px 0 0;
   text-align: center;
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
-  box-shadow: none;
+  border-radius: 0;
 }
 
 .data-table.moora td {
   background: white;
   padding: 14px;
-  border-radius: 14px;
   text-align: center;
   font-size: 14px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.07);
-  transition: 0.25s ease;
+  color: #0f172a;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 0; /* ✅ hilangkan kapsul */
+  box-shadow: none;
 }
 
 /* Hover Row */
 .data-table.moora tr:hover td {
-  background: #eef4ff;
-  transform: translateY(-3px);
+  background: #f8fafc;
+  transform: none;
+}
+.data-table.moora thead tr th:first-child {
+  border-top-left-radius: 10px;
 }
 
+.data-table.moora thead tr th:last-child {
+  border-top-right-radius: 10px;
+}
 /* ==========================================================
    FINAL TABLE — RANKING + VOTING
 ========================================================== */

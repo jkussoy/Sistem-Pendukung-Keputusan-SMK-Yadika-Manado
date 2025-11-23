@@ -1,50 +1,95 @@
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #007bff;
+/* ======================================================
+   ULTRA PREMIUM THEME — YADIKA BLUE EDITION
+   ====================================================== */
+
+.premium-bg {
+  background: linear-gradient(145deg, #005bbb, #1e73ff);
+  animation: neonPulse 6s ease-in-out infinite;
 }
 
-.login-box {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  text-align: center;
-  width: 350px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+@keyframes neonPulse {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.25);
+  }
+  100% {
+    filter: brightness(1);
+  }
 }
 
-.school-logo {
-  width: 100px;
-  margin-bottom: 20px;
+/* Card Glassmorphism Premium */
+.premium-card {
+  width: 380px;
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 22px;
+  box-shadow: 0 12px 38px rgba(0, 91, 187, 0.35);
+  padding: 45px 35px;
 }
 
-h2 {
-  font-size: 18px;
-  margin-bottom: 5px;
-  color: #333;
+/* Logo */
+.premium-logo {
+  width: 125px;
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.25));
 }
 
-p {
-  margin-bottom: 30px;
-  color: #555;
+/* Typography Ultra Premium */
+.title-text {
+  color: #ffffff;
+  font-size: 1.48rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
 }
 
-.login-btn {
-  display: block;
+.subtitle-text {
+  color: #e9f1ff;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+}
+
+/* FIX — override semua style tombol lama */
+button.premium-btn {
+  background: #ffffff !important; /* putih */
+  color: #005bbb !important; /* biru */
+  font-weight: 600;
+
+  padding: 10px 14px;
   width: 100%;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15) !important;
   cursor: pointer;
-  margin-bottom: 10px;
-  font-weight: bold;
-  transition: 0.3s;
+  transition: 0.2s ease-in-out;
 }
 
-.login-btn:hover {
-  background-color: #0056b3;
+/* HOVER */
+button.premium-btn:hover {
+  background: #f3f7ff !important; /* putih kebiruan */
+  color: #005bbb !important;
+  transform: translateY(-1px);
+}
+
+/* ACTIVE */
+button.premium-btn:active {
+  background: #e8efff !important; /* biru sangat muda */
+  transform: scale(0.97);
+}
+
+/* Footer */
+.footer-premium {
+  font-size: 13px;
+  color: #e6e6e6;
+  opacity: 0.82;
+}
+
+/* Mobile Responsive */
+@media (max-width: 420px) {
+  .premium-card {
+    width: 92% !important;
+    padding: 35px 20px;
+  }
 }

@@ -1,0 +1,156 @@
+.cp-wrapper {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #0047ab, #002d6b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ✅ CARD PREMIUM */
+.cp-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 34px 30px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  animation: fadeUp 0.45s ease-out;
+}
+
+/* ✅ TITLE */
+.cp-card h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.cp-sub {
+  font-size: 13px;
+  text-align: center;
+  color: #dbeafe;
+  margin-bottom: 22px;
+}
+
+/* ✅ FORM GROUP */
+.cp-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.cp-group label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+/* ✅ INPUT */
+.cp-input-wrap {
+  position: relative;
+}
+
+.cp-input-wrap input {
+  width: 100%;
+  padding: 12px 42px 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(203, 213, 225, 0.75);
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  color: #0f172a;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+.cp-input-wrap input::placeholder {
+  color: #64748b;
+}
+
+.cp-input-wrap input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
+  background: #ffffff;
+}
+
+/* ✅ EYE ICON */
+.toggle-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.65;
+  transition: 0.2s;
+  font-size: 16px;
+  color: #475569;
+}
+
+.toggle-eye:hover {
+  opacity: 1;
+}
+
+/* ✅ BUTTON PREMIUM LOGIN STYLE */
+.cp-btn {
+  width: 100%;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1e73ff, #004ce6);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 0 18px 38px rgba(30, 115, 255, 0.45);
+  transition: 0.18s ease;
+  margin-top: 4px;
+}
+
+.cp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 48px rgba(30, 115, 255, 0.6);
+}
+
+/* ✅ DISABLED STATE */
+.cp-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ✅ ANIMATION */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ✅ LOGO */
+.cp-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.cp-logo img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+}
+
+/* ✅ LABEL FULL PUTIH */
+.cp-group label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #ffffff !important;
+}

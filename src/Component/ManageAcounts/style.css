@@ -1,0 +1,303 @@
+/* ===================== MANAGE ACCOUNTS ===================== */
+
+.manage-accounts-layout {
+  margin-top: 8px;
+}
+
+/* TABEL FULL jika belum ada detail */
+.manage-accounts-layout.single {
+  display: block;
+}
+
+/* Split 2 kolom jika detail terbuka (DESKTOP) */
+.manage-accounts-layout.with-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(340px, 1.05fr);
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* ---------- TABEL DESKTOP ---------- */
+
+.account-table-wrapper {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 14px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  padding: 12px 14px;
+}
+
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.account-table th,
+.account-table td {
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.account-table thead th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.account-table tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.account-table tbody tr:hover {
+  background: #eef2ff;
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------- DETAIL CARD DESKTOP ---------- */
+
+.account-detail-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 14px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  padding: 16px 18px;
+}
+
+.detail-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.detail-header-row h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.detail-close-btn {
+  border: none;
+  border-radius: 999px;
+  width: 24px;
+  height: 24px;
+  font-size: 13px;
+  cursor: pointer;
+  background: #e5e7eb;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-close-btn:hover {
+  background: #d1d5db;
+}
+
+.detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.detail-row .label {
+  color: #6b7280;
+}
+
+.detail-row .value {
+  font-weight: 500;
+  color: #111827;
+  text-align: right;
+  word-break: break-all;
+}
+
+/* badge status dalam detail */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-green {
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.35);
+}
+
+.badge-red {
+  background: rgba(248, 113, 113, 0.1);
+  color: #b91c1c;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+}
+
+.detail-row .value.mono {
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+}
+
+.detail-note {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* ---------- MOBILE ACCOUNT CARD ---------- */
+
+.mobile-account-list {
+  display: none; /* default: hidden, muncul di mobile */
+}
+
+.mobile-account-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 14px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  padding: 12px 14px;
+}
+
+.mobile-account-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.mobile-account-header .mobile-index {
+  color: #2563eb;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.mobile-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4px;
+}
+
+.acc-label {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.acc-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.mobile-actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------- DETAIL MODAL (MOBILE) ---------- */
+
+.detail-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: none; /* hanya aktif di mobile */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.detail-modal {
+  width: 90%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.55);
+}
+
+.modal-header-row {
+  margin-bottom: 8px;
+}
+
+/* ============================
+   RESPONSIVE UNTUK MANAGE ACCOUNTS
+   (NGIKUTI BREAKPOINT HOME)
+   ============================ */
+
+/* Tablet / small desktop */
+@media (max-width: 992px) {
+  .manage-accounts-layout.with-detail {
+    grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
+  }
+}
+
+/* Mobile & tablet: pakai card, bukan table */
+@media (max-width: 900px) {
+  .manage-accounts-layout.with-detail {
+    display: block; /* jangan grid di mobile */
+  }
+
+  .account-detail-card {
+    display: none; /* hide panel kanan di mobile */
+  }
+
+  .detail-modal-backdrop {
+    display: flex; /* show modal ketika ada selectedUser */
+  }
+
+  .account-table-wrapper {
+    display: none; /* hide tabel */
+  }
+
+  .mobile-account-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+}
+
+/* Mobile landscape */
+@media (max-width: 768px) {
+  .mobile-actions button {
+    flex: 1 1 calc(50% - 6px);
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 576px) {
+  .mobile-actions {
+    flex-direction: column;
+  }
+
+  .mobile-actions button {
+    width: 100%;
+  }
+
+  .detail-modal {
+    width: 92%;
+  }
+}

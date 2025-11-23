@@ -1,5 +1,5 @@
 /* =====================================================
-   🧮 ALTERNATIVE PAGE — ULTRA PREMIUM EDITION v2
+   🧮 ALTERNATIVE PAGE — PREMIUM RESPONSIVE FINAL EDITION
 ===================================================== */
 
 /* WRAPPER CARD */
@@ -10,6 +10,20 @@
   border-left: 4px solid #2563eb;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
   animation: fadeInUp 0.4s ease-out;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* FORCE CONTENT NOT PUSHED BY SIDEBAR */
+.alt-wrapper,
+.criteria-notes-box,
+.alt-table-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
 }
 
 /* HEADER */
@@ -26,32 +40,32 @@
   font-size: 15px;
 }
 
-/* =====================================================
-   PREMIUM BUTTON
-===================================================== */
-.btn-toggle-form {
+/* BUTTONS */
+.btn-toggle-form,
+.btn-primary {
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   border: none;
   padding: 12px 24px;
   border-radius: 14px;
   cursor: pointer;
-  margin-bottom: 22px;
   font-size: 15px;
   font-weight: 600;
   transition: 0.25s ease;
-  display: inline-block;
   box-shadow: 0 12px 26px rgba(37, 99, 235, 0.3);
 }
 
-.btn-toggle-form:hover {
+.btn-toggle-form {
+  margin-bottom: 22px;
+}
+
+.btn-toggle-form:hover,
+.btn-primary:hover {
   transform: translateY(-3px);
   opacity: 0.95;
 }
 
-/* =====================================================
-   PREMIUM FORM CARD
-===================================================== */
+/* FORM CARD */
 .alt-form {
   background: #f9faff;
   border-radius: 18px;
@@ -68,7 +82,7 @@
   gap: 22px;
 }
 
-/* INPUT GROUP */
+/* INPUT */
 .form-group label {
   font-weight: 600;
   color: #1e3a8a;
@@ -76,7 +90,8 @@
   font-size: 14px;
 }
 
-.form-group input {
+.form-group input,
+.editable-input {
   padding: 12px;
   border: 1px solid #c7d2fe;
   border-radius: 12px;
@@ -84,136 +99,70 @@
   background: white;
   transition: 0.25s ease;
   height: 45px;
+  text-align: center;
+  width: 100%;
 }
 
-.form-group input:focus {
+.editable-input {
+  width: 90px;
+  height: auto;
+}
+
+.form-group input:focus,
+.editable-input:focus {
   border-color: #2563eb;
   outline: none;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-/* SUBMIT BUTTON */
-.form-submit {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 14px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #2563eb, #1e3a8a);
-  color: white;
-  padding: 12px 26px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: none;
-  font-weight: 600;
-  transition: 0.25s ease;
-  box-shadow: 0 12px 28px rgba(30, 64, 175, 0.3);
-  font-size: 15px;
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  opacity: 0.9;
-}
-
-/* =====================================================
-   KODE KRITERIA BOX (C1, C2, C3)
-===================================================== */
-.criteria-notes-box {
+/* TABLE CONTAINERS */
+.criteria-notes-box,
+.alt-table-section {
   background: #f4f7ff;
   padding: 18px 22px;
   border-radius: 16px;
   border: 1px solid #c7d2fe;
   margin: 30px 0;
   box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+  overflow-x: hidden !important;
 }
 
-.criteria-notes-box h4 {
-  margin-bottom: 14px;
-  font-size: 17px;
-  color: #1e3a8a;
-  font-weight: 700;
-}
-
-.notes-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.notes-table th {
-  background: #2563eb;
-  color: white;
-  padding: 12px;
-  text-align: left;
-  font-size: 14px;
-  border-radius: 10px 10px 0 0;
-}
-
-.notes-table td {
-  padding: 10px;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 14px;
-}
-
-/* =====================================================
-   MODERN FLOATING TABLE (MAIN MATRIX)
-===================================================== */
-.alt-table-section {
-  margin-top: 24px;
-  overflow-x: auto;
-}
-
+/* UNIFIED TABLE STYLE */
+.notes-table,
 .criteria-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 15px;
-  min-width: 780px;
+  border-collapse: collapse;
+  min-width: 720px;
 }
 
 /* TABLE HEADER */
+.notes-table th,
 .criteria-table th {
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   padding: 14px;
-  border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
-  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
 }
 
-/* ROWS */
+/* TABLE CELLS */
+.notes-table td,
 .criteria-table td {
   background: white;
-  padding: 14px;
+  padding: 12px;
   text-align: center;
-  border-radius: 14px;
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.08);
-  transition: 0.25s ease;
+  border-bottom: 1px solid #e2e8f0;
   font-size: 14px;
+  border-radius: 10px;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
 }
 
+/* HOVER */
+.notes-table tr:hover td,
 .criteria-table tr:hover td {
   background: #eef5ff;
-  transform: translateY(-3px);
-}
-
-/* EDIT INPUT */
-.editable-input {
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  text-align: center;
-  width: 90px;
-  padding: 8px;
-  border-radius: 10px;
-  transition: 0.25s ease;
-}
-
-.editable-input:focus {
-  background: #eef4ff;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
-  outline: none;
 }
 
 /* DELETE BUTTON */
@@ -231,21 +180,18 @@
 .btn-delete:hover {
   background: #dc2626;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.25);
 }
 
 /* EMPTY STATE */
 .empty {
   background: #f8fafc;
-  border-radius: 12px;
-  padding: 18px;
+  padding: 16px;
+  border-radius: 10px;
   font-style: italic;
   color: #94a3b8;
 }
 
-/* =====================================================
-   ANIMATION
-===================================================== */
+/* ANIMATIONS */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -266,23 +212,107 @@
   }
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .alt-wrapper {
-    padding: 22px;
+    padding: 18px;
   }
 
-  .btn-primary,
-  .btn-toggle-form {
+  .editable-input {
+    width: 65px;
+    font-size: 12px;
+  }
+
+  .btn-toggle-form,
+  .btn-primary {
     width: 100%;
-    text-align: center;
   }
 }
 
 @media (max-width: 480px) {
   .editable-input {
-    width: 55px;
+    width: 50px;
+    font-size: 11px;
+  }
+
+  .notes-table th,
+  .criteria-table th,
+  .notes-table td,
+  .criteria-table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+/* ============================================
+   ✅ SCALE TABLE — EXACT MATCH WITH OTHER TABLES
+============================================ */
+
+.scale-box {
+  background: #f4f7ff;
+  padding: 22px 26px;
+  border-radius: 18px;
+  border: 1px solid #c7d2fe;
+  margin: 32px 0;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.12);
+  animation: fadeInUp 0.35s ease-out;
+}
+
+.scale-box h4 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* ✅ Scroll Wrapper */
+.scale-scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+/* ✅ SAME STRUCTURE AS criteria-table */
+.scale-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+/* ✅ SAME HEADER */
+.scale-table thead th {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 0;
+}
+
+/* ✅ SAME CELL STYLE */
+.scale-table td {
+  background: white;
+  padding: 14px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+}
+
+/* ✅ SAME HOVER EFFECT */
+.scale-table tr:hover td {
+  background: #eef5ff;
+}
+
+/* ✅ Mobile */
+@media (max-width: 480px) {
+  .scale-table th,
+  .scale-table td {
+    padding: 9px;
+    font-size: 12px;
   }
 }
