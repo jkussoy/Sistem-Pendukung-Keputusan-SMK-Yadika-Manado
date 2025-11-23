@@ -13,6 +13,41 @@ const Alternative = () => {
   const [newAlt, setNewAlt] = useState({ code: "", name: "" });
   const [values, setValues] = useState({});
   const [username, setUsername] = useState("");
+  const [scales, setScales] = useState({});
+  const [newScaleValue, setNewScaleValue] = useState("");
+  const [newScaleLabel, setNewScaleLabel] = useState("");
+
+  useEffect(() => {
+    const scaleRef = ref(db, `scales/${agendaId}`);
+    onValue(scaleRef, (snap) => {
+      setScales(snap.val() || {});
+    });
+  }, [agendaId]);
+  const addScale = () => {
+    if (userRole !== "operator") return alert("Akses ditolak!");
+
+    if (!newScaleValue || !newScaleLabel)
+      return alert("Isi nilai dan keterangan!");
+
+    update(ref(db, `scales/${agendaId}`), {
+      [newScaleValue]: newScaleLabel,
+    });
+
+    setNewScaleValue("");
+    setNewScaleLabel("");
+  };
+  const updateScale = (value, label) => {
+    if (userRole !== "operator") return;
+
+    update(ref(db, `scales/${agendaId}`), {
+      [value]: label,
+    });
+  };
+  const deleteScale = (value) => {
+    if (userRole !== "operator") return alert("Akses ditolak!");
+
+    remove(ref(db, `scales/${agendaId}/${value}`));
+  };
 
   // Ambil data user, criteria, dan alternative dari Firebase
   useEffect(() => {
@@ -140,98 +175,136 @@ const Alternative = () => {
           </div>
         </div>
       )}
+      <div className="scale-box">
+        <h4>📊 Skala Penilaian Alternatif</h4>
+
+        <div className="scale-scroll">
+          <table className="criteria-table">
+            <thead>
+              <tr>
+                <th>Nilai</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Sangat Buruk</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Buruk</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Netral</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Baik</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Sangat Baik</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* 📝 NOTES PENJELASAN C1, C2, C3 */}
       <div className="criteria-notes-box">
         <h4>📝 Penjelasan Kode Kriteria</h4>
-
-        <table className="notes-table">
-          <thead>
-            <tr>
-              <th>Kode</th>
-              <th>Nama Kriteria</th>
-              <th>Label</th>
-            </tr>
-          </thead>
-          <tbody>
-            {criteria.map((c) => (
-              <tr key={c.id}>
-                <td>{c.code}</td>
-                <td>{c.name}</td>
-                <td>{c.label}</td>
-              </tr>
-            ))}
-
-            {criteria.length === 0 && (
+        <div className="table-scroll">
+          <table className="criteria-table">
+            <thead>
               <tr>
-                <td colSpan="3" style={{ textAlign: "center" }}>
-                  Belum ada kriteria
-                </td>
+                <th>Kode</th>
+                <th>Nama Kriteria</th>
+                <th>Label</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {criteria.map((c) => (
+                <tr key={c.id}>
+                  <td>{c.code}</td>
+                  <td>{c.name}</td>
+                  <td>{c.label}</td>
+                </tr>
+              ))}
+
+              {criteria.length === 0 && (
+                <tr>
+                  <td colSpan="3" style={{ textAlign: "center" }}>
+                    Belum ada kriteria
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <section className="alt-table-section">
         <h3>📋 Matriks Nilai Alternatif per Kriteria</h3>
-
-        <table className="criteria-table">
-          <thead>
-            <tr>
-              <th>Alternatif</th>
-              {criteria.map((c) => (
-                <th key={c.id}>{c.code}</th>
-              ))}
-              <th>Aksi</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {alternatives.length === 0 ? (
+        <div className="table-scroll">
+          <table className="criteria-table">
+            <thead>
               <tr>
-                <td colSpan={criteria.length + 2} className="empty">
-                  Belum ada alternatif
-                </td>
+                <th>Alternatif</th>
+                {criteria.map((c) => (
+                  <th key={c.id}>{c.code}</th>
+                ))}
+                <th>Aksi</th>
               </tr>
-            ) : (
-              alternatives.map((alt) => (
-                <tr key={alt.id}>
-                  <td>{alt.name}</td>
+            </thead>
 
-                  {criteria.map((c) => (
-                    <td key={c.code}>
-                      <input
-                        type="number"
-                        step="0.01"
-                        defaultValue={
-                          values?.[alt.id]?.[c.code]
-                            ? values[alt.id][c.code]
-                            : ""
-                        }
-                        onBlur={(e) =>
-                          handleValueChange(alt.id, c.code, e.target.value)
-                        }
-                        className="editable-input"
-                      />
-                    </td>
-                  ))}
-
-                  <td>
-                    {userRole === "operator" && (
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDelete(alt.id)}
-                      >
-                        🗑️
-                      </button>
-                    )}
+            <tbody>
+              {alternatives.length === 0 ? (
+                <tr>
+                  <td colSpan={criteria.length + 2} className="empty">
+                    Belum ada alternatif
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                alternatives.map((alt) => (
+                  <tr key={alt.id}>
+                    <td>{alt.name}</td>
+
+                    {criteria.map((c) => (
+                      <td key={c.code}>
+                        <input
+                          type="number"
+                          step="0.01"
+                          defaultValue={
+                            values?.[alt.id]?.[c.code]
+                              ? values[alt.id][c.code]
+                              : ""
+                          }
+                          onBlur={(e) =>
+                            handleValueChange(alt.id, c.code, e.target.value)
+                          }
+                          className="editable-input"
+                        />
+                      </td>
+                    ))}
+
+                    <td>
+                      {userRole === "operator" && (
+                        <button
+                          className="btn-delete"
+                          onClick={() => handleDelete(alt.id)}
+                        >
+                          🗑️
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );

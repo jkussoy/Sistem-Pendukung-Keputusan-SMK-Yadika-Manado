@@ -182,7 +182,8 @@
    ================================================================ */
 .data-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate !important;
+  border-spacing: 0 12px !important;
   overflow: hidden;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.65);
@@ -209,11 +210,58 @@
 
 .data-table tbody tr {
   transition: 0.25s ease;
+  background: transparent !important;
+}
+.data-table tbody tr.gold-row td {
+  background: #fff8dc !important;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(255, 193, 7, 0.25);
+}
+/* ✅ HEADER Tetap Rounded */
+.data-table thead tr th:first-child {
+  border-top-left-radius: 16px;
+}
+
+.data-table thead tr th:last-child {
+  border-top-right-radius: 16px;
+}
+
+/* ✅ BODY CARD COLUMN Tetap Rounded */
+.data-table tbody td {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  padding: 14px 18px;
+}
+
+/* ✅ Hilangkan garis tabel lama */
+.data-table tbody td {
+  border: none !important;
+}
+
+/* ✅ Jarak antar baris */
+.data-table {
+  border-collapse: separate !important;
+  border-spacing: 0 12px !important;
+}
+
+/* ✅ Peringkat 1 tetap special */
+.data-table tbody tr.gold-row td {
+  background: #fff8dc !important;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(255, 193, 7, 0.25);
 }
 
 .data-table tbody tr:hover {
   background: rgba(59, 130, 246, 0.1);
   transform: translateX(4px);
+}
+.data-table tbody td {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  padding: 14px 18px;
+  border-bottom: none !important;
 }
 
 .gold-row {
@@ -252,5 +300,251 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+/* ============================================
+   ✅ TABLE HEADER TEXT FIX (PUTIH)
+============================================ */
+.data-table thead th {
+  color: #ffffff !important;
+}
+
+/* ============================================
+   ✅ RESPONSIVE MODE (MAX 768px / HP)
+============================================ */
+@media (max-width: 768px) {
+  .data-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .data-table-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .data-table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(30, 58, 138, 0.35);
+    border-radius: 8px;
+  }
+  .workspace-home {
+    padding: 14px;
+  }
+
+  .agenda-info-box,
+  .recommendation-box,
+  .result-section {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .agenda-info-box h2 {
+    font-size: 18px;
+  }
+
+  .recommendation-box h3 {
+    font-size: 16px;
+  }
+
+  .highlight-box h4 {
+    font-size: 18px;
+  }
+
+  .data-table {
+    font-size: 13px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================
+   ✅ EXTRA SMALL SCREEN (MAX 480px / HP KECIL)
+============================================ */
+@media (max-width: 480px) {
+  .agenda-info-box h2 {
+    font-size: 16px;
+  }
+
+  .recommendation-box p {
+    font-size: 13px;
+  }
+
+  .highlight-box {
+    padding: 16px;
+  }
+
+  .highlight-score {
+    font-size: 15px;
+  }
+
+  table.data-table {
+    font-size: 12px;
+  }
+}
+.data-table::-webkit-scrollbar {
+  height: 6px;
+}
+
+.data-table::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 138, 0.4);
+  border-radius: 10px;
+}
+/* ============================================================
+   ✅ UNIVERSAL ULTRA-PREMIUM TABLE STYLE
+   Berlaku untuk semua tabel: .data-table & .criteria-table
+=========================================================== */
+
+.data-table,
+.criteria-table {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0 14px !important;
+  background: transparent;
+}
+
+/* ✅ HEADER UNIVERSAL */
+.data-table thead th,
+.criteria-table thead th {
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  color: #ffffff !important;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+
+.data-table thead th:first-child,
+.criteria-table thead th:first-child {
+  border-top-left-radius: 18px;
+}
+
+.data-table thead th:last-child,
+.criteria-table thead th:last-child {
+  border-top-right-radius: 18px;
+}
+
+/* ✅ BODY UNIVERSAL */
+.data-table tbody td,
+.criteria-table tbody td {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  text-align: center;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.1);
+  border: none !important;
+  transition: 0.25s ease;
+}
+
+/* ✅ HOVER UNIVERSAL */
+.data-table tbody tr:hover td,
+.criteria-table tbody tr:hover td {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* ✅ BOTTOM RADIUS UNIVERSAL */
+.data-table tbody tr:last-child td:first-child,
+.criteria-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 18px;
+}
+
+.data-table tbody tr:last-child td:last-child,
+.criteria-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 18px;
+}
+
+/* ✅ GOLD RANK UNIVERSAL */
+.data-table tbody tr.gold-row td,
+.criteria-table tbody tr.gold-row td {
+  background: linear-gradient(135deg, #fff6c4, #ffeaa7) !important;
+  font-weight: 700;
+  box-shadow: 0 10px 26px rgba(255, 193, 7, 0.3) !important;
+}
+
+/* ✅ LABEL CHIP UNIVERSAL */
+.label-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.label-chip.benefit {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.label-chip.cost {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ✅ WRAPPER UNIVERSAL (untuk scroll mobile) */
+.data-table-wrapper,
+.criteria-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  position: relative;
+}
+
+/* ✅ SCROLLBAR UNIVERSAL */
+.data-table-wrapper::-webkit-scrollbar,
+.criteria-table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.data-table-wrapper::-webkit-scrollbar-thumb,
+.criteria-table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 138, 0.4);
+  border-radius: 10px;
+}
+
+/* ============================================================
+   ✅ MOBILE RESPONSIVE UNIVERSAL
+=========================================================== */
+@media (max-width: 768px) {
+  .data-table thead th,
+  .criteria-table thead th,
+  .data-table tbody td,
+  .criteria-table tbody td {
+    padding: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .data-table-wrapper::after,
+  .criteria-table-wrapper::after {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #6b7280;
+    opacity: 0.8;
+    animation: scrollHint 2s infinite;
+  }
+}
+
+@keyframes scrollHint {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
   }
 }

@@ -1,11 +1,11 @@
 /* ============================================================
-   ULTRA PREMIUM DESIGN (Matching WorkspaceHome)
-   Glass, shadows, animations, stagger rows
+   ✅ ULTRA PREMIUM CRITERIA PAGE
+   Glass · Rounded · Shadow Depth · Mobile Ready
 =========================================================== */
 
 :root {
   --bg-main: rgba(255, 255, 255, 0.45);
-  --bg-card: rgba(255, 255, 255, 0.65);
+  --bg-card: rgba(255, 255, 255, 0.75);
   --shadow-glass: rgba(15, 23, 42, 0.12);
   --text-primary: #0f172a;
   --text-secondary: #64748b;
@@ -14,17 +14,17 @@
   --accent-blue-dark: #1d4ed8;
 }
 
-/* WRAPPER */
+/* ✅ WRAPPER */
 .criteria-wrapper {
   background: var(--bg-main);
   padding: 28px;
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: 0 20px 46px var(--shadow-glass);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   animation: fadeInUp 0.35s ease-out;
 }
 
-/* HEADER */
+/* ✅ HEADER */
 .criteria-header h2 {
   font-size: 22px;
   font-weight: 700;
@@ -38,7 +38,7 @@
   margin-bottom: 20px;
 }
 
-/* FORM TOGGLE BUTTON */
+/* ✅ TOGGLE BUTTON */
 .btn-toggle-form {
   background: linear-gradient(
     135deg,
@@ -60,23 +60,22 @@
   box-shadow: 0 20px 40px rgba(37, 99, 235, 0.45);
 }
 
-/* FORM WRAPPER + ANIMATION */
+/* ✅ FORM CARD */
 .criteria-form {
   background: var(--bg-card);
-  backdrop-filter: blur(14px);
-  border-radius: 14px;
+  border-radius: 16px;
   border: 1px solid var(--border-soft);
   padding: 22px;
   margin-top: 14px;
   animation: slideDown 0.35s ease-out;
-  overflow: hidden;
+  backdrop-filter: blur(14px);
 }
 
 .criteria-form.fadeOut {
   animation: fadeOutUp 0.3s ease forwards;
 }
 
-/* FORM GRID */
+/* ✅ FORM GRID */
 .criteria-form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -90,12 +89,13 @@
   margin-bottom: 6px;
 }
 
+/* ✅ FORM INPUTS */
 .form-group input,
 .form-group select {
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   transition: 0.25s ease;
 }
 
@@ -107,7 +107,7 @@
   outline: none;
 }
 
-/* SUBMIT BUTTON */
+/* ✅ SUBMIT BUTTON */
 .form-submit {
   margin-top: 18px;
   display: flex;
@@ -131,59 +131,90 @@
   box-shadow: 0 18px 40px rgba(22, 163, 74, 0.6);
 }
 
-/* TABLE */
+/* ============================================================
+   ✅ PREMIUM TABLE V2
+=========================================================== */
+
 .criteria-table-section {
   margin-top: 30px;
 }
 
 .criteria-table-section h3 {
   font-size: 18px;
-  color: var(--text-primary);
-  margin-bottom: 10px;
   font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
 }
 
+/* ✅ SCROLL WRAPPER */
+.criteria-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  position: relative;
+}
+
+/* ✅ TABLE */
 .criteria-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 12px;
+  border-collapse: separate !important;
+  border-spacing: 0 14px !important;
+  text-align: center;
 }
 
-.criteria-table th {
-  background: var(--accent-blue);
-  color: white;
-  padding: 12px 10px;
+/* ✅ HEADER MELENGKUNG */
+.criteria-table thead th {
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  color: #ffffff !important;
+  padding: 14px;
   font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.4px;
+  border-radius: 0 !important;
+}
+.criteria-table thead tr {
+  background: linear-gradient(90deg, #1e3a8a, #2563eb);
 }
 
-.criteria-table td {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  padding: 12px 10px;
-  border-radius: 12px;
+.criteria-table thead th:first-child {
+  border-top-left-radius: 18px !important;
+}
+
+.criteria-table thead th:last-child {
+  border-top-right-radius: 18px !important;
+}
+
+/* ✅ BODY ROUND + CENTER */
+.criteria-table tbody td {
+  background: #ffffff;
+  padding: 14px;
+  text-align: center;
   font-size: 14px;
-  color: var(--text-primary);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
-  transition: 0.25s ease;
+  font-weight: 500;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.criteria-table tbody tr {
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
-/* Hover premium */
-.criteria-table tr:hover td {
-  background: rgba(59, 130, 246, 0.08);
-  transform: translateY(-3px);
+/* ✅ HOVER */
+.criteria-table tbody tr:hover td {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
 }
 
-/* Editable input */
+/* ✅ INPUT INLINE */
 .editable-input {
   width: 90%;
   padding: 6px;
-  border: none;
   background: transparent;
+  border: none;
   text-align: center;
   font-weight: 500;
-  transition: 0.25s ease;
 }
 
 .editable-input:focus {
@@ -194,13 +225,7 @@
   outline: none;
 }
 
-/* AutoWeight */
-.auto-weight {
-  background: rgba(0, 0, 0, 0.05);
-  font-weight: 600;
-}
-
-/* Delete button */
+/* ✅ DELETE BUTTON */
 .btn-delete {
   padding: 7px 10px;
   border-radius: 12px;
@@ -217,7 +242,7 @@
   transform: translateY(-2px);
 }
 
-/* Empty */
+/* ✅ EMPTY */
 .empty {
   padding: 14px;
   border-radius: 12px;
@@ -226,10 +251,55 @@
 }
 
 /* ============================================================
-   ANIMATIONS
+   ✅ MOBILE RESPONSIVE
 =========================================================== */
 
-/* Fade-in Up */
+@media (max-width: 768px) {
+  .criteria-wrapper {
+    padding: 16px;
+  }
+
+  .criteria-table thead th,
+  .criteria-table tbody td {
+    padding: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .editable-input {
+    font-size: 12px;
+    width: 100%;
+  }
+
+  /* ✅ Scroll indicator */
+  .criteria-table-wrapper::after {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #6b7280;
+    opacity: 0.8;
+    animation: scrollHint 2s infinite;
+  }
+}
+
+@keyframes scrollHint {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* ============================================================
+   ✅ ANIMATIONS
+=========================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -241,7 +311,6 @@
   }
 }
 
-/* Form slide */
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -263,20 +332,9 @@
   }
 }
 
-/* Stagger rows */
-.criteria-table tbody tr {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: rowFade 0.45s ease forwards;
-}
-
 @keyframes rowFade {
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.criteria-table tbody tr {
-  animation-delay: calc(0.05s * var(--i));
 }

@@ -1,6 +1,6 @@
 /* ============================================================
    WORKSPACE PREMIUM UI — IDENTICAL TO HOME DESIGN
-   ============================================================*/
+============================================================*/
 
 /* WRAPPER */
 .workspace-wrapper {
@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 
-/* HEADER — SAME AS HOME */
+/* HEADER */
 .workspace-header {
   position: fixed;
   top: 0;
@@ -35,6 +35,7 @@
   align-items: center;
   gap: 12px;
 }
+
 .workspace-logo-wrap {
   width: 44px;
   height: 44px;
@@ -42,24 +43,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white !important; /* PUTIH */
+  background: white !important;
   box-shadow: none !important;
-}
-
-.logo-badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #60a5fa, #2563eb);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
 }
 
 .workspace-logo {
   width: 28px;
 }
+
 .workspace-title-text h2 {
   margin: 0;
   font-size: 16px;
@@ -72,23 +63,7 @@
   color: #64748b;
 }
 
-.header-text h2 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.header-sub {
-  margin: 0;
-  font-size: 11px;
-  color: #6b7280;
-}
-
-/* =======================================================
-   PREMIUM WORKSPACE HEADER — NO AVATAR VERSION
-   ======================================================= */
-
+/* USER META */
 .workspace-right {
   display: flex;
   align-items: center;
@@ -96,7 +71,6 @@
   margin-right: 40px;
 }
 
-/* User meta (name + role stacked) */
 .workspace-user-meta {
   display: flex;
   flex-direction: column;
@@ -110,7 +84,6 @@
   color: #111827;
 }
 
-/* Role badge */
 .workspace-role-pill {
   margin-top: 2px;
   padding: 3px 10px;
@@ -139,7 +112,7 @@
   border: 1px solid #fde047;
 }
 
-/* Logout button */
+/* LOGOUT BUTTON */
 .workspace-logout {
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
@@ -157,7 +130,7 @@
   box-shadow: 0 12px 26px rgba(37, 99, 235, 0.35);
 }
 
-/* MAIN LAYOUT */
+/* LAYOUT */
 .workspace-layout {
   display: flex;
   flex: 1;
@@ -166,30 +139,33 @@
   overflow: hidden;
 }
 
-/* SIDEBAR — IDENTICAL TO HOME */
+/* SIDEBAR */
 .workspace-sidebar {
   position: fixed;
-  top: 64px; /* sama seperti Home */
+  top: 64px;
   left: 0;
   width: 210px;
-  height: calc(100vh - 64px); /* full height */
+  height: calc(100vh - 64px);
   background: linear-gradient(180deg, #f1f5f9, #e5edff);
   border-right: 1px solid rgba(148, 163, 184, 0.35);
   padding: 22px 14px;
+
+  /* ✅ FIX TERPENTING */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.workspace-main {
+  margin-left: 210px;
+}
+.workspace-menu-group {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow: hidden;
-}
-.workspace-main {
-  margin-left: 210px; /* geser seperti Home */
-}
-.workspace-menu-wrapper {
-  flex: 1;
-  overflow-y: auto; /* scroll di menu, bukan sidebar */
-  padding-right: 4px;
 }
 
+/* MENU */
 .workspace-menu {
   padding: 11px 14px;
   border-radius: 999px;
@@ -201,6 +177,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 }
 
 .workspace-menu:hover,
@@ -211,23 +188,18 @@
   transform: translateY(-1px);
 }
 
-.workspace-back {
-  margin-top: 280px;
-  background: #1e3a8a;
-  color: white;
-  font-weight: 600;
-  padding: 10px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  border: none;
-  transition: 0.25s ease;
+/* ICON + LABEL */
+.menu-icon {
+  font-size: 20px;
 }
 
-.workspace-back:hover {
-  background: #172554;
+.menu-label {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-/* MAIN AREA */
+/* MAIN CONTENT */
 .workspace-main {
   flex: 1;
   padding: 40px;
@@ -251,6 +223,10 @@
   border-bottom: 2px solid #2563eb;
   padding-bottom: 8px;
 }
+/* ✅ BOTTOM SECTION */
+.workspace-bottom {
+  margin-top: auto;
+}
 
 .workspace-box {
   padding: 20px;
@@ -260,7 +236,7 @@
   min-height: 300px;
 }
 
-/* Animation */
+/* ANIMATION */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -269,5 +245,110 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ===========================================
+   RESPONSIVE ICON-ONLY SIDEBAR
+=========================================== */
+@media (max-width: 900px) {
+  .workspace-sidebar {
+    width: 64px !important;
+    padding: 18px 8px;
+  }
+
+  .workspace-main {
+    margin-left: 64px !important;
+    padding: 20px;
+  }
+
+  .menu-label {
+    display: none !important;
+  }
+
+  .workspace-menu {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .menu-icon {
+    font-size: 22px;
+  }
+}
+/* BACK BUTTON — SAME STYLE AS OTHER MENU */
+.back-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #475569 !important;
+  margin-top: auto !important;
+  padding: 11px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+/* Hover & Active — follow menu behavior */
+.back-btn:hover,
+.back-btn:active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: white !important;
+  transform: translateY(-1px);
+}
+/* ===========================================
+   RESPONSIVE HEADER (MOBILE FIX)
+=========================================== */
+@media (max-width: 900px) {
+  .back-btn {
+    margin-bottom: 12px !important;
+  }
+  .workspace-header {
+    padding: 6px 14px;
+    height: 56px;
+    border-bottom-width: 2px;
+  }
+
+  /* Left section (logo + title) */
+  .workspace-left {
+    gap: 6px;
+  }
+
+  .workspace-logo-wrap {
+    width: 34px;
+    height: 34px;
+  }
+
+  .workspace-logo {
+    width: 22px;
+  }
+
+  .workspace-title-text h2 {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Hide subtext "SMK Yadika Manado" */
+  .workspace-sub {
+    display: none;
+  }
+
+  /* Right section (username, role, logout) */
+  .workspace-right {
+    gap: 8px;
+    margin-right: 0;
+  }
+
+  .workspace-username {
+    font-size: 12px;
+  }
+
+  .workspace-role-pill {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .workspace-logout {
+    padding: 6px 10px;
+    font-size: 11px;
+    border-radius: 8px;
   }
 }

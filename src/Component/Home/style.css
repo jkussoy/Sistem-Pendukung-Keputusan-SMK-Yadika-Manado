@@ -107,14 +107,15 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 64px;
-  padding: 8px 28px;
+  height: 72px; /* ✅ lebih tinggi biar muat */
+  padding: 10px 20px;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
   display: flex;
-  justify-content: flex-start;
-  gap: 24px;
-  align-items: center;
+  justify-content: space-between; /* ✅ kiri - kanan */
+  align-items: center; /* ✅ rata tengah */
+  flex-wrap: nowrap; /* ✅ cegah turun ke bawah */
+  gap: 20px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.4);
   z-index: 999;
 }
@@ -230,14 +231,14 @@
 .content-layout {
   display: flex;
   flex: 1;
-  margin-top: 64px;
+  margin-top: 80px;
   height: calc(100vh - 64px);
   overflow: hidden;
 }
 
 .sidebar {
   position: fixed;
-  top: 64px;
+  top: 90px;
   left: 0;
   width: 210px;
   height: calc(100vh - 64px);
@@ -720,12 +721,17 @@
   }
 
   .sidebar {
-    width: 70px;
-    padding-inline: 8px;
+    position: fixed;
+    left: 0;
+    width: 60px;
+    padding-inline: 6px;
+  }
+  .sidebar .text {
+    display: none;
   }
 
   .main-content {
-    margin-left: 70px;
+    margin-left: 60px;
     padding: 16px 16px 22px;
   }
 
@@ -741,25 +747,53 @@
   .agenda-row {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    gap: 8px;
+    padding: 14px 12px;
   }
 
   .agenda-actions {
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+  .agenda-actions button {
+    flex: 1 1 calc(50% - 6px);
+  }
+  .agenda-col {
+    width: 100%;
+  }
 }
 
 /* Mobile Portrait */
 @media (max-width: 576px) {
-  .topbar {
-    height: auto;
-    padding: 10px 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+  .welcome-title {
+    font-size: 16px;
   }
 
+  .welcome-sub {
+    font-size: 11px;
+  }
+  .topbar {
+    height: auto;
+    padding: 6px 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .header-text {
+    display: none; /* ✅ hemat ruang di HP */
+  }
+  .header-text h2 {
+    font-size: 13px;
+  }
+
+  .header-subtitle {
+    font-size: 10px;
+  }
+  .logo-header {
+    width: 26px;
+    height: 26px;
+  }
   .user-info {
     width: 100%;
     justify-content: space-between;
@@ -781,6 +815,10 @@
 
   .agenda-actions button {
     flex: 1;
+  }
+  .logout {
+    padding: 6px 10px;
+    font-size: 11px;
   }
 }
 /* =============================
@@ -810,4 +848,144 @@
 
 .main-content.expand {
   margin-left: 70px;
+}
+.profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  transition: transform 0.15s ease;
+}
+
+.profile-avatar:hover {
+  transform: translateY(-2px);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 64px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  z-index: 9999;
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  color: #111827;
+  transition: background 0.15s ease;
+}
+
+.profile-dropdown button:hover {
+  background: #f1f5f9;
+}
+.user-avatar {
+  cursor: pointer;
+}
+
+.header-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.header-avatar.default {
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e293b;
+  font-weight: 700;
+}
+.right-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-right: 32px;
+}
+
+.user-avatar {
+  cursor: pointer;
+}
+
+.header-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1e40af;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.header-avatar.default {
+  background: #e5e7eb;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.user-meta-header {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.username-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(185, 28, 28, 0.45);
+  transition: 0.18s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(185, 28, 28, 0.6);
 }

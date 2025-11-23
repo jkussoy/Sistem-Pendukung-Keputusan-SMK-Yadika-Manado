@@ -16,22 +16,18 @@ const Workspace = () => {
   /* ============================
         LOAD USER + AGENDA
   ============================ */
-
   useEffect(() => {
     const auth = getAuth();
 
-    // Ambil nama dari Firebase Auth
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUsername(user.displayName || user.email || "User");
       }
     });
 
-    // Ambil role dari localStorage
     const storedRole = localStorage.getItem("userRole");
     if (storedRole) setUserRole(storedRole);
 
-    // Load agenda
     const agendaRef = ref(db, `agendas/${agendaId}`);
     const unsubscribeAgenda = onValue(agendaRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -67,7 +63,7 @@ const Workspace = () => {
 
     signOut(auth)
       .then(() => {
-        localStorage.clear(); // pastikan role & nama juga dibersihkan
+        localStorage.clear();
         navigate("/landing-page");
       })
       .catch((error) => {
@@ -77,7 +73,7 @@ const Workspace = () => {
 
   return (
     <div className="workspace-wrapper">
-      {/* HEADER — SAME STYLE AS HOME */}
+      {/* HEADER */}
       <header className="workspace-header">
         <div className="workspace-left">
           <div className="workspace-logo-wrap">
@@ -114,73 +110,84 @@ const Workspace = () => {
       </header>
 
       <div className="workspace-layout">
-        {/* SIDEBAR — MATCH HOME DESIGN */}
-        <aside className="workspace-sidebar">
-          {userRole === "operator" && (
+        {/* SIDEBAR */}
+        <aside className="workspace-sidebar sidebar-collapse">
+          {/* ✅ MENU GROUP */}
+          <div className="workspace-menu-group">
+            {userRole === "operator" && (
+              <NavLink
+                to={`/workspace/${agendaId}/voting-result`}
+                className={({ isActive }) =>
+                  isActive ? "workspace-menu active" : "workspace-menu"
+                }
+              >
+                <span className="menu-icon">🗳️</span>
+                <span className="menu-label">Voting Result</span>
+              </NavLink>
+            )}
+
             <NavLink
-              to={`/workspace/${agendaId}/voting-result`}
+              to={`/workspace/${agendaId}/workspacehome`}
+              end
               className={({ isActive }) =>
                 isActive ? "workspace-menu active" : "workspace-menu"
               }
             >
-              🗳️ Voting Result
+              <span className="menu-icon">🏠</span>
+              <span className="menu-label">Home</span>
             </NavLink>
-          )}
 
-          <NavLink
-            to={`/workspace/${agendaId}/workspacehome`}
-            end
-            className={({ isActive }) =>
-              isActive ? "workspace-menu active" : "workspace-menu"
-            }
-          >
-            🏠 Home
-          </NavLink>
+            {userRole === "operator" && (
+              <NavLink
+                to={`/workspace/${agendaId}/criteria`}
+                className={({ isActive }) =>
+                  isActive ? "workspace-menu active" : "workspace-menu"
+                }
+              >
+                <span className="menu-icon">📋</span>
+                <span className="menu-label">Criteria</span>
+              </NavLink>
+            )}
 
-          {userRole === "operator" && (
             <NavLink
-              to={`/workspace/${agendaId}/criteria`}
+              to={`/workspace/${agendaId}/alternatives`}
               className={({ isActive }) =>
                 isActive ? "workspace-menu active" : "workspace-menu"
               }
             >
-              📋 Criteria
+              <span className="menu-icon">🧩</span>
+              <span className="menu-label">Alternative</span>
             </NavLink>
-          )}
 
-          <NavLink
-            to={`/workspace/${agendaId}/alternatives`}
-            className={({ isActive }) =>
-              isActive ? "workspace-menu active" : "workspace-menu"
-            }
-          >
-            🧩 Alternative
-          </NavLink>
+            <NavLink
+              to={`/workspace/${agendaId}/weighting`}
+              className={({ isActive }) =>
+                isActive ? "workspace-menu active" : "workspace-menu"
+              }
+            >
+              <span className="menu-icon">⚖️</span>
+              <span className="menu-label">Weight</span>
+            </NavLink>
 
-          <NavLink
-            to={`/workspace/${agendaId}/weighting`}
-            className={({ isActive }) =>
-              isActive ? "workspace-menu active" : "workspace-menu"
-            }
-          >
-            ⚖️ Weight
-          </NavLink>
-
-          <NavLink
-            to={`/workspace/${agendaId}/result`}
-            className={({ isActive }) =>
-              isActive ? "workspace-menu active" : "workspace-menu"
-            }
-          >
-            🏁 Result
-          </NavLink>
-
-          <button
-            className="workspace-menu active"
-            onClick={() => navigate("/home")}
-          >
-            ⬅️ Kembali ke Home
-          </button>
+            <NavLink
+              to={`/workspace/${agendaId}/result`}
+              className={({ isActive }) =>
+                isActive ? "workspace-menu active" : "workspace-menu"
+              }
+            >
+              <span className="menu-icon">🏁</span>
+              <span className="menu-label">Result</span>
+            </NavLink>
+            <NavLink
+              to={`/home`}
+              className={({ isActive }) =>
+                isActive ? "workspace-menu active" : "workspace-menu"
+              }
+            >
+              <span className="menu-icon">⬅️</span>
+              <span className="menu-label">Kembali ke Home</span>
+            </NavLink>
+          </div>
         </aside>
 
         {/* MAIN */}

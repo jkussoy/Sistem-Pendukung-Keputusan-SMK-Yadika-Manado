@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import Logo from "./../../Assets/Image/Logo.png";
+import Logo from "./../../Assets/Image/Logo02.png";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../Config/Firebase";
@@ -9,7 +9,6 @@ import { ref, get } from "firebase/database";
 const Login = () => {
   const navigate = useNavigate();
 
-  // FORM STATE
   const [email, setEmail] = useState(
     localStorage.getItem("rememberEmail") || ""
   );
@@ -20,12 +19,10 @@ const Login = () => {
     localStorage.getItem("rememberMe") === "true"
   );
 
-  // UI
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  // AUTO LOGIN (jika sudah login)
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -35,7 +32,6 @@ const Login = () => {
     });
   }, [navigate]);
 
-  // VALIDASI KUSTOM
   const validateForm = () => {
     if (!email.trim()) {
       setError("Email tidak boleh kosong");
@@ -56,37 +52,46 @@ const Login = () => {
     return true;
   };
 
-  // LOGIN HANDLER
   const handleLogin = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setLoading(true);
     setError("");
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const loginResult = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
+      const uid = loginResult.user.uid;
 
-      const uid = userCredential.user.uid;
+      // 🔥 Ambil semua data user sekaligus
+      const userRef = ref(db, `users/${uid}`);
+      const userSnap = await get(userRef);
 
-      // role lookup
-      const roleSnap = await get(ref(db, `users/${uid}/role`));
-
-      if (!roleSnap.exists()) {
-        setError("Role tidak ditemukan, hubungi admin.");
+      if (!userSnap.exists()) {
+        setError("Data akun tidak ditemukan. Hubungi operator.");
         setLoading(false);
         return;
       }
 
-      const role = roleSnap.val();
+      const userData = userSnap.val();
+      const role = userData.role || "";
+      const status = userData.status || "active"; // default active jika belum ada field
+
+      // ❌ Jika akun dinonaktifkan
+      if (status === "disabled") {
+        setError("Akun Anda telah dinonaktifkan. Hubungi operator.");
+        await auth.signOut(); // keluar paksa
+        setLoading(false);
+        return;
+      }
+
+      // ✅ Simpan role jika aktif
       localStorage.setItem("userRole", role);
 
-      // REMEMBER ME
       if (remember) {
         localStorage.setItem("rememberEmail", email);
         localStorage.setItem("rememberPassword", password);
@@ -100,13 +105,11 @@ const Login = () => {
       navigate("/home");
     } catch (err) {
       setError("Email atau password salah");
-      console.log("Login Error:", err);
     }
 
     setLoading(false);
   };
 
-  // AUTO HIDE ERROR
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => setError(""), 4000);
@@ -115,89 +118,100 @@ const Login = () => {
   }, [error]);
 
   return (
-    <div className="login-container fade-in">
-      <div className="login-box slide-up">
-        <img src={Logo} alt="Logo Sekolah" className="school-logo" />
+    <div className="premium-bg login-page d-flex justify-content-center align-items-center vh-100">
+      <div className="login-card fade-in shadow-lg p-4">
+        <img src={Logo} alt="Logo" className="login-logo mb-3" />
 
-        <h2>LOGIN</h2>
-        <p>Masukkan email & password Anda</p>
+        <h2 className="login-title">LOGIN</h2>
+        <p className="login-subtitle">Masukkan email & password Anda</p>
 
-        {error && <div className="alert-error fade-in">{error}</div>}
+        {error && <div className="alert-error">{error}</div>}
 
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            className="input-field"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <div className="password-wrapper">
+        <form onSubmit={handleLogin} className="mt-3">
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Email</label>
             <input
-              type={showPass ? "text" : "password"}
-              placeholder="Password"
-              className="input-field"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="email"
+              className="form-control premium-input"
+              placeholder="Masukkan Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-
-            <span className="show-pass" onClick={() => setShowPass(!showPass)}>
-              {showPass ? (
-                /* EYE OPEN (Professional Feather Icon) */
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#4a4a4a"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              ) : (
-                /* EYE CLOSED (Professional Feather Icon) */
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#4a4a4a"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M17.94 17.94C16.12 19.12 14.12 20 12 20c-7 0-11-8-11-8a21.75 21.75 0 0 1 5.06-6.94" />
-                  <path d="M1 1l22 22" />
-                  <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
-                  <path d="M12 5c2.12 0 4.12.88 5.94 2.06A21.75 21.75 0 0 1 23 12s-1.12 2.24-3 4" />
-                </svg>
-              )}
-            </span>
           </div>
 
-          <div className="remember-me">
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Password</label>
+
+            <div className="position-relative">
+              <input
+                type={showPass ? "text" : "password"}
+                className="form-control premium-input"
+                placeholder="Masukkan Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <span
+                className="position-absolute top-50 end-0 translate-middle-y me-3 toggle-pass"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {showPass ? (
+                  // eye-off
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="#6c757d"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5 20 1 12 1 12a21.45 21.45 0 0 1 5.06-6.94" />
+                    <path d="M9.88 9.88a3 3 0 0 0 4.24 4.24" />
+                    <path d="M12 5c2.12 0 4.12.88 5.94 2.06A21.45 21.45 0 0 1 23 12a21.45 21.45 0 0 1-2.06 3.94" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                ) : (
+                  // eye
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="#6c757d"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-check mb-3">
             <input
               type="checkbox"
+              className="form-check-input login-checkbox"
               checked={remember}
               onChange={() => setRemember(!remember)}
             />
-            <label>Remember Me</label>
+            <label className="form-check-label login-check-label">
+              Remember Me
+            </label>
           </div>
 
-          <button type="submit" className="login-btn" disabled={loading}>
+          <button type="submit" className="w-100 login-btn" disabled={loading}>
             {loading ? "LOADING..." : "LOGIN"}
           </button>
         </form>
 
-        <p className="signin-text">
+        {/* <p className="signin-text mt-3">
           Belum punya akun? <a href="/signup">SIGN UP</a>
-        </p>
+        </p> */}
       </div>
     </div>
   );

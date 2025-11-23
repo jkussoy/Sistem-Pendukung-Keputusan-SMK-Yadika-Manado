@@ -17,6 +17,23 @@ const Home = () => {
   const [userRole, setUserRole] = useState("");
   const [loadingRole, setLoadingRole] = useState(true);
   const [auditLogs, setAuditLogs] = useState([]);
+  const [photoURL, setPhotoURL] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [photoBase64, setPhotoBase64] = useState("");
+
+  const [isDark, setIsDark] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
+
   const [sidebarMini, setSidebarMini] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -42,19 +59,43 @@ const Home = () => {
 
     const unsubAuth = onAuthStateChanged(auth, async (user) => {
       if (!user) {
+        setLoadingRole(false); // jaga-jaga biar gak nge-freeze
         navigate("/login");
         return;
       }
 
-      setUsername(user.displayName || user.email || "Guru");
-      setUserUID(user.uid);
+      try {
+        setUserUID(user.uid);
 
-      const roleSnap = await get(ref(db, `users/${user.uid}/role`));
-      const role = roleSnap.exists() ? roleSnap.val() : "";
+        // Ambil data lengkap user dari Realtime Database
+        const userRefDB = ref(db, `users/${user.uid}`);
+        const snap = await get(userRefDB);
 
-      setUserRole(role);
-      localStorage.setItem("userRole", role);
-      setLoadingRole(false);
+        if (snap.exists()) {
+          const data = snap.val();
+
+          setUsername(
+            data.name || user.displayName || user.email || "Pengguna"
+          );
+          setUserRole(data.role || "");
+          setPhotoBase64(data.photoBase64 || "");
+          localStorage.setItem("userRole", data.role || "");
+        } else {
+          // Fallback kalau node users/uid belum ada
+          setUsername(user.displayName || user.email || "Pengguna");
+          setUserRole("");
+          localStorage.setItem("userRole", "");
+        }
+      } catch (err) {
+        console.error("Gagal load data user:", err);
+        // Fallback supaya app tetap jalan
+        setUsername(user.displayName || user.email || "Pengguna");
+        setUserRole("");
+        localStorage.setItem("userRole", "");
+      } finally {
+        // 🔥 WAJIB: apapun yang terjadi, loadingRole dimatikan
+        setLoadingRole(false);
+      }
     });
 
     return () => unsubAuth();
@@ -325,20 +366,31 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="user-info">
-          <div className="user-meta">
-            <span className="username">{username}</span>
-            {userRole && (
-              <span className={`role-pill role-${userRole}`}>
-                {userRole === "operator"
-                  ? "Operator"
-                  : userRole === "teacher"
-                  ? "Teacher"
-                  : "Student"}
-              </span>
+        <div className="right-header">
+          {/* ✅ Username + Role */}
+          <div className="user-meta-header">
+            <span className="username-header">{username}</span>
+            <span className={`role-pill role-${userRole}`}>
+              {userRole === "operator"
+                ? "Operator"
+                : userRole === "teacher"
+                ? "Teacher"
+                : "Student"}
+            </span>
+          </div>
+          {/* ✅ Avatar */}
+          <div className="user-avatar" onClick={() => navigate("/profile")}>
+            {photoBase64 ? (
+              <img src={photoBase64} className="header-avatar" />
+            ) : (
+              <div className="header-avatar default">
+                {username.charAt(0).toUpperCase()}
+              </div>
             )}
           </div>
-          <button onClick={handleLogout} className="logout">
+
+          {/* ✅ Logout Button */}
+          <button className="logout-btn" onClick={handleLogout}>
             Keluar
           </button>
         </div>
@@ -357,6 +409,17 @@ const Home = () => {
 
             {sidebarMini && <div className="sidebar-tooltip">Dashboard</div>}
           </div>
+          {userRole === "operator" && (
+            <div className="menu-item">
+              <button
+                className="menu-btn"
+                onClick={() => navigate("/manage-accounts")}
+              >
+                <span className="icon">👥</span>
+                <span className="text">Daftar Akun</span>
+              </button>
+            </div>
+          )}
         </aside>
 
         <main className={`main-content ${sidebarMini ? "expand" : ""}`}>

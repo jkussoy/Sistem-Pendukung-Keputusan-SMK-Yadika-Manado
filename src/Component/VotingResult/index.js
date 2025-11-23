@@ -12,6 +12,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  ResponsiveContainer,
 } from "recharts";
 import { getAuth } from "firebase/auth";
 import jsPDF from "jspdf";
@@ -30,9 +31,7 @@ const VotingResult = () => {
   const [voterList, setVoterList] = useState([]);
   const [username, setUsername] = useState("");
 
-  /* =====================================================
-     LOAD USER NAME
-     ===================================================== */
+  /* Load User */
   useEffect(() => {
     const user = getAuth().currentUser;
     if (user) {
@@ -40,36 +39,26 @@ const VotingResult = () => {
     }
   }, []);
 
-  /* =====================================================
-     LOAD AGENDA TITLE
-     ===================================================== */
+  /* Load Agenda Title */
   useEffect(() => {
     if (!agendaId) return;
-
     const agendaRef = ref(db, `agendas/${agendaId}`);
     const unsub = onValue(agendaRef, (snap) => {
       const data = snap.val();
       setAgendaTitle(data?.topic || "Agenda Tanpa Judul");
     });
-
     return () => unsub();
   }, [agendaId]);
 
-  /* =====================================================
-     LOAD ALTERNATIVES & VOTE COUNT
-     ===================================================== */
+  /* Load Alternatives & Vote Count */
   useEffect(() => {
     if (!agendaId) return;
-
     const altRef = ref(db, `alternatives/${agendaId}`);
     const voteRef = ref(db, `voteCount/${agendaId}`);
 
     const unsubAlt = onValue(altRef, (snap) => {
       const data = snap.val() || {};
-      const list = Object.entries(data).map(([id, v]) => ({
-        id,
-        ...v,
-      }));
+      const list = Object.entries(data).map(([id, v]) => ({ id, ...v }));
       setAlternatives(list);
     });
 
@@ -83,18 +72,15 @@ const VotingResult = () => {
     };
   }, [agendaId]);
 
-  /* =====================================================
-     LOAD USER VOTING DETAILS
-     ===================================================== */
+  /* Load Voter Detail */
   useEffect(() => {
     if (!agendaId || alternatives.length === 0) return;
 
     const votesRef = ref(db, `votes/${agendaId}`);
     const usersRef = ref(db, "users");
 
-    const unsubVotes = onValue(votesRef, async (voteSnap) => {
-      const votes = voteSnap.val() || {};
-
+    const unsubVotes = onValue(votesRef, async (snap) => {
+      const votes = snap.val() || {};
       const usersSnap = await get(usersRef);
       const users = usersSnap.val() || {};
 
@@ -124,9 +110,7 @@ const VotingResult = () => {
     return () => unsubVotes();
   }, [agendaId, alternatives]);
 
-  /* =====================================================
-     AUDIT LOG — PAGE VIEW
-     ===================================================== */
+  /* Log Page View */
   useEffect(() => {
     if (userRole === "operator" && agendaId) {
       saveLog({
@@ -137,9 +121,7 @@ const VotingResult = () => {
     }
   }, [userRole, agendaId, agendaTitle]);
 
-  /* =====================================================
-     CHART DATA
-     ===================================================== */
+  /* Chart Data */
   const chartData = alternatives.map((alt) => ({
     altId: alt.id,
     name: alt.code || alt.id,
@@ -149,12 +131,9 @@ const VotingResult = () => {
 
   const sortedTable = [...chartData].sort((a, b) => b.votes - a.votes);
 
-  /* =====================================================
-     DATE FORMATTER
-     ===================================================== */
+  /* Time Formatter */
   const formatTimestamp = (iso) => {
     if (!iso || iso === "-") return "-";
-
     return new Date(iso).toLocaleString("id-ID", {
       day: "2-digit",
       month: "short",
@@ -165,9 +144,7 @@ const VotingResult = () => {
     });
   };
 
-  /* =====================================================
-     EXPORT PDF + COVER PAGE + AUDIT LOG
-     ===================================================== */
+  /* EXPORT PDF */
   const exportPDF = () => {
     saveLog({
       action: "EXPORT_VOTING_PDF",
@@ -176,32 +153,21 @@ const VotingResult = () => {
     });
 
     const schoolName = "SMK Yadika Manado";
-    const printedAt = new Date().toLocaleString("id-ID", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+    const printedAt = new Date().toLocaleString("id-ID");
 
     const doc = new jsPDF({ unit: "mm", format: "a4" });
 
     const generatePdfContent = (img) => {
-      // COVER
       if (img) doc.addImage(img, "PNG", 75, 20, 60, 60);
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
       doc.text(schoolName, 105, 90, { align: "center" });
-
       doc.setFontSize(16);
       doc.text("LAPORAN HASIL VOTING", 105, 105, { align: "center" });
-
       doc.setFont("helvetica", "normal");
       doc.setFontSize(13);
       doc.text(`Agenda: ${agendaTitle}`, 105, 115, { align: "center" });
-
       doc.setFontSize(11);
       doc.text(`Dicetak pada: ${printedAt}`, 105, 125, { align: "center" });
       doc.text(`Dicetak oleh: ${username} (${userRole})`, 105, 132, {
@@ -210,29 +176,12 @@ const VotingResult = () => {
 
       doc.addPage();
 
-      // TABLE - Voting Result
-      doc.setFontSize(14);
-      doc.text(`Tabel Hasil Voting`, 14, 20);
-
       autoTable(doc, {
-        startY: 24,
         head: [["Kode", "Nama Alternatif", "Jumlah Suara"]],
-        body: sortedTable.map((row) => [
-          row.name,
-          row.fullName,
-          row.votes.toString(),
-        ]),
-        styles: { fontSize: 11 },
+        body: sortedTable.map((r) => [r.name, r.fullName, r.votes.toString()]),
       });
 
-      let y = doc.lastAutoTable?.finalY ? doc.lastAutoTable.finalY + 10 : 40;
-
-      // TABLE - Voter List
-      doc.setFontSize(14);
-      doc.text(`Daftar Pemilih`, 14, y);
-
       autoTable(doc, {
-        startY: y + 4,
         head: [["Nama", "Email", "Role", "Pilihan", "Waktu Voting"]],
         body: voterList.map((v) => [
           v.name,
@@ -241,7 +190,6 @@ const VotingResult = () => {
           v.altLabel,
           formatTimestamp(v.time),
         ]),
-        styles: { fontSize: 10 },
       });
 
       doc.save(`Hasil-Voting-${agendaTitle}.pdf`);
@@ -253,108 +201,145 @@ const VotingResult = () => {
     img.src = Logo;
   };
 
-  /* =====================================================
-     ROLE CHECK
-     ===================================================== */
+  /* Role Guard */
   if (userRole !== "operator") {
-    return <p>Akses hanya untuk Operator.</p>;
+    return (
+      <p className="text-center text-danger mt-5">
+        Akses hanya untuk Operator.
+      </p>
+    );
   }
 
-  /* =====================================================
-     RENDER PAGE
-     ===================================================== */
+  /* RENDER */
   return (
-    <div className="voting-result-wrapper">
-      <h2>📊 Hasil Voting Alternatif</h2>
-      <h4>Agenda: {agendaTitle}</h4>
+    <div className="container py-3 voting-result-wrapper">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+        <div>
+          <h2 className="mb-1">📊 Hasil Voting Alternatif</h2>
+          <h6 className="text-muted">Agenda: {agendaTitle}</h6>
+        </div>
 
-      <button className="add-criteria-toggle" onClick={exportPDF}>
-        📄 Export PDF
-      </button>
-
-      <h3>Bar Chart</h3>
-      <div className="chart-box">
-        <BarChart width={700} height={350} data={chartData}>
-          <XAxis dataKey="name" />
-          <YAxis allowDecimals={false} />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="votes" />
-        </BarChart>
+        <button className="btn btn-primary shadow-sm" onClick={exportPDF}>
+          📄 Export PDF
+        </button>
       </div>
 
-      <h3>Pie Chart</h3>
-      <div className="chart-box">
-        <PieChart width={380} height={300}>
-          <Pie
-            data={chartData}
-            dataKey="votes"
-            cx="50%"
-            cy="50%"
-            outerRadius={90}
-            label={(entry) => entry.name}
-          >
-            {chartData.map((_, i) => (
-              <Cell key={i} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
+      {/* CHARTS */}
+      <div className="row g-3 mb-3">
+        <div className="col-12 col-lg-7">
+          <div className="card shadow-sm h-100">
+            <div className="card-body">
+              <h5 className="card-title mb-3">Bar Chart</h5>
+              <div style={{ width: "100%", height: 320 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData}>
+                    <XAxis dataKey="name" />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="votes" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-lg-5">
+          <div className="card shadow-sm h-100">
+            <div className="card-body">
+              <h5 className="card-title mb-3">Pie Chart</h5>
+              <div style={{ width: "100%", height: 280 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      dataKey="votes"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius="80%"
+                      label={(entry) => entry.name}
+                    >
+                      {chartData.map((_, i) => (
+                        <Cell key={i} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <h3>Tabel Hasil Voting</h3>
-      <table className="vote-result-table">
-        <thead>
-          <tr>
-            <th>Posisi</th>
-            <th>Kode</th>
-            <th>Nama Alternatif</th>
-            <th>Jumlah Suara</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTable.map((row, idx) => (
-            <tr key={row.altId}>
-              <td>{idx + 1}</td>
-              <td>{row.name}</td>
-              <td>{row.fullName}</td>
-              <td>{row.votes}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* TABLE VOTING */}
+      <div className="card shadow-sm mb-3">
+        <div className="card-body">
+          <h5 className="card-title mb-3">Tabel Hasil Voting</h5>
+          <div className="table-responsive">
+            <table className="table table-hover table-striped vote-result-table text-center">
+              <thead>
+                <tr>
+                  <th>Posisi</th>
+                  <th>Kode</th>
+                  <th>Nama Alternatif</th>
+                  <th>Jumlah Suara</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedTable.map((row, idx) => (
+                  <tr key={row.altId}>
+                    <td>{idx + 1}</td>
+                    <td>{row.name}</td>
+                    <td>{row.fullName}</td>
+                    <td>{row.votes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-      <h3>🧾 Daftar Pemilih</h3>
-      <table className="vote-result-table">
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Pilihan</th>
-            <th>Waktu Voting</th>
-          </tr>
-        </thead>
-        <tbody>
-          {voterList.length === 0 ? (
-            <tr>
-              <td colSpan="5" className="empty">
-                Belum ada voting.
-              </td>
-            </tr>
-          ) : (
-            voterList.map((v) => (
-              <tr key={v.uid}>
-                <td>{v.name}</td>
-                <td>{v.email}</td>
-                <td>{v.role}</td>
-                <td>{v.altLabel}</td>
-                <td>{formatTimestamp(v.time)}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      {/* VOTER LIST */}
+      <div className="card shadow-sm mb-3">
+        <div className="card-body">
+          <h5 className="card-title mb-3">🧾 Daftar Pemilih</h5>
+          <div className="table-responsive">
+            <table className="table table-hover table-striped vote-result-table text-center">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Pilihan</th>
+                  <th>Waktu Voting</th>
+                </tr>
+              </thead>
+              <tbody>
+                {voterList.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="text-muted py-3">
+                      Belum ada voting.
+                    </td>
+                  </tr>
+                ) : (
+                  voterList.map((v) => (
+                    <tr key={v.uid}>
+                      <td>{v.name}</td>
+                      <td>{v.email}</td>
+                      <td>{v.role}</td>
+                      <td>{v.altLabel}</td>
+                      <td>{formatTimestamp(v.time)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
