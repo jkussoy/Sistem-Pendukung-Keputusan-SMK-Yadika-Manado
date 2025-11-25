@@ -21,6 +21,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ManageAccounts from "./Component/ManageAcounts";
 import ChangePassword from "./Component/ChangePassword";
 import Profile from "./Component/Profile";
+import Contact from "./Component/Contact";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route path="*" element={<Navigate to="/landing-page" replace />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );

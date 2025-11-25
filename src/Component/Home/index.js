@@ -4,7 +4,6 @@ import { ref, push, onValue, remove, update, get } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Logo from "./../../Assets/Image/Logo.png";
-import Logo2 from "./../../Assets/Image/Logo02.png";
 import "./style.css";
 import { saveLog } from "../../Utils/savelogs";
 
@@ -16,158 +15,70 @@ const Home = () => {
   const [userUID, setUserUID] = useState("");
   const [userRole, setUserRole] = useState("");
   const [loadingRole, setLoadingRole] = useState(true);
-  const [auditLogs, setAuditLogs] = useState([]);
-  const [photoURL, setPhotoURL] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [photoBase64, setPhotoBase64] = useState("");
-
-  const [isDark, setIsDark] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
-  useEffect(() => {
-    if (isDark) {
-      document.body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
-
   const [sidebarMini, setSidebarMini] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 900) {
-        setSidebarMini(true); // Auto mini
-      } else {
-        setSidebarMini(false); // Full mode
-      }
-    };
+  const [selectedRole, setSelectedRole] = useState("all");
 
-    handleResize(); // run on first load
+  const navigate = useNavigate();
+
+  // Auto mini sidebar on small screen
+  useEffect(() => {
+    const handleResize = () => setSidebarMini(window.innerWidth < 900);
+
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const navigate = useNavigate();
 
-  /* =====================================================
-     LOAD USER + ROLE DARI FIREBASE (REALTIME & AMAN)
-     ===================================================== */
+  // Load user & role
   useEffect(() => {
     const auth = getAuth();
 
-    const unsubAuth = onAuthStateChanged(auth, async (user) => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        setLoadingRole(false); // jaga-jaga biar gak nge-freeze
+        setLoadingRole(false);
         navigate("/login");
         return;
       }
 
+      setUserUID(user.uid);
+
       try {
-        setUserUID(user.uid);
-
-        // Ambil data lengkap user dari Realtime Database
-        const userRefDB = ref(db, `users/${user.uid}`);
-        const snap = await get(userRefDB);
-
+        const snap = await get(ref(db, `users/${user.uid}`));
         if (snap.exists()) {
           const data = snap.val();
-
-          setUsername(
-            data.name || user.displayName || user.email || "Pengguna"
-          );
+          setUsername(data.name || user.email);
           setUserRole(data.role || "");
           setPhotoBase64(data.photoBase64 || "");
-          localStorage.setItem("userRole", data.role || "");
         } else {
-          // Fallback kalau node users/uid belum ada
-          setUsername(user.displayName || user.email || "Pengguna");
-          setUserRole("");
-          localStorage.setItem("userRole", "");
+          setUsername(user.email);
         }
-      } catch (err) {
-        console.error("Gagal load data user:", err);
-        // Fallback supaya app tetap jalan
-        setUsername(user.displayName || user.email || "Pengguna");
-        setUserRole("");
-        localStorage.setItem("userRole", "");
-      } finally {
-        // 🔥 WAJIB: apapun yang terjadi, loadingRole dimatikan
-        setLoadingRole(false);
+      } catch {
+        setUsername(user.email);
       }
-    });
-
-    return () => unsubAuth();
-  }, [navigate]);
-
-  /* =====================================================
-     LOAD AGENDA LIST
-     ===================================================== */
-  useEffect(() => {
-    const agendaRef = ref(db, "agendas");
-    const unsubAgenda = onValue(agendaRef, (snapshot) => {
-      const data = snapshot.val() || {};
-      const all = Object.entries(data).map(([id, val]) => ({ id, ...val }));
-      all.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
-      setAgendas(all);
-    });
-
-    return () => unsubAgenda();
-  }, []);
-
-  /* =====================================================
-     LOAD AUDIT LOGS (OPERATOR ONLY)
-     ===================================================== */
-  useEffect(() => {
-    if (userRole !== "operator") return;
-
-    const logRef = ref(db, "auditLogs");
-    const unsub = onValue(logRef, (snap) => {
-      const data = snap.val() || {};
-
-      const list = Object.entries(data).map(([id, v]) => ({
-        id,
-        ...v,
-      }));
-
-      list.sort((a, b) => new Date(b.time) - new Date(a.time));
-
-      setAuditLogs(list.slice(0, 10));
+      setLoadingRole(false);
     });
 
     return () => unsub();
-  }, [userRole]);
+  }, [navigate]);
 
-  /* =====================================================
-     TUNGGU ROLE SEBELUM RENDER (ANTI-FLICKER)
-     ===================================================== */
-  if (loadingRole) {
-    return (
-      <div className="loading-screen-pro">
-        <div className="loading-card-pro">
-          <div className="loader-ring"></div>
+  // Load agendas realtime
+  useEffect(() => {
+    const unsub = onValue(ref(db, "agendas"), (snapshot) => {
+      const data = snapshot.val() || {};
+      const list = Object.entries(data).map(([id, v]) => ({ id, ...v }));
+      list.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+      setAgendas(list);
+    });
 
-          <div className="loader-logo">
-            <img src={Logo2} alt="logo" />
-          </div>
+    return () => unsub();
+  }, []);
 
-          <h3 className="loading-title">Loading Dashboard...</h3>
-          <p className="loading-sub">Please wait a moment</p>
-        </div>
-      </div>
-    );
-  }
-
-  /* =====================================================
-     ADD AGENDA
-     ===================================================== */
   const handleAddAgenda = async () => {
-    if (userRole !== "operator") {
-      return alert("Akses ditolak! Hanya operator yang bisa menambah agenda.");
-    }
+    if (userRole !== "operator") return alert("Hanya operator!");
 
-    if (topic.trim() === "") return alert("Topik tidak boleh kosong!");
+    if (!topic.trim()) return alert("Topik wajib diisi!");
 
     const data = {
       topic,
@@ -176,6 +87,7 @@ const Home = () => {
       date: new Date().toLocaleString(),
       createdAt: Date.now(),
       votingClosed: false,
+      assignedTo: selectedRole,
     };
 
     const newAgenda = await push(ref(db, "agendas"), data);
@@ -189,18 +101,14 @@ const Home = () => {
       detail: `Menambahkan agenda: ${topic}`,
     });
 
-    alert("Agenda berhasil dibuat!");
     setTopic("");
     setShowForm(false);
+    alert("Agenda ditambahkan!");
   };
 
-  /* =====================================================
-     DELETE AGENDA
-     ===================================================== */
   const handleDelete = async (id) => {
-    if (userRole !== "operator") return alert("Akses ditolak!");
-
-    if (!window.confirm("Yakin ingin menghapus agenda ini?")) return;
+    if (userRole !== "operator") return;
+    if (!window.confirm("Hapus agenda ini?")) return;
 
     await remove(ref(db, `agendas/${id}`));
     await remove(ref(db, `voteCount/${id}`));
@@ -213,83 +121,154 @@ const Home = () => {
       role: userRole,
       action: "DELETE_AGENDA",
       agendaId: id,
-      detail: "Menghapus agenda beserta seluruh data voting",
+      detail: "Menghapus agenda & voting",
     });
 
-    alert("Agenda berhasil dihapus!");
+    alert("Agenda terhapus!");
   };
 
-  /* =====================================================
-     RESET VOTING
-     ===================================================== */
-  const handleResetVoting = async (agenda) => {
+  const handleResetVoting = async (a) => {
     if (userRole !== "operator") return;
+    if (!window.confirm("Reset semua suara agenda ini?")) return;
 
-    if (!window.confirm("Reset semua suara untuk agenda ini?")) return;
-
-    await remove(ref(db, `voteCount/${agenda.id}`));
-    await remove(ref(db, `votes/${agenda.id}`));
+    await remove(ref(db, `voteCount/${a.id}`));
+    await remove(ref(db, `votes/${a.id}`));
 
     await saveLog({
       userId: userUID,
       userName: username,
       role: userRole,
       action: "RESET_VOTING",
-      agendaId: agenda.id,
-      detail: `Mereset semua suara`,
+      agendaId: a.id,
     });
 
-    alert("Voting berhasil di-reset!");
+    alert("Voting direset!");
   };
 
-  /* =====================================================
-     TOGGLE OPEN/CLOSE VOTING
-     ===================================================== */
-  const toggleVoting = async (agenda) => {
+  const toggleVoting = async (a) => {
     if (userRole !== "operator") return;
 
-    const willClose = !agenda.votingClosed;
+    const newVal = !a.votingClosed;
+    if (!window.confirm(newVal ? "Tutup voting?" : "Buka voting?")) return;
 
-    if (!window.confirm(willClose ? "Tutup voting?" : "Buka voting kembali?"))
-      return;
-
-    await update(ref(db, `agendas/${agenda.id}`), {
-      votingClosed: willClose,
+    await update(ref(db, `agendas/${a.id}`), {
+      votingClosed: newVal,
     });
 
     await saveLog({
       userId: userUID,
       userName: username,
       role: userRole,
-      action: willClose ? "CLOSE_VOTING" : "OPEN_VOTING",
-      agendaId: agenda.id,
-      detail: willClose ? "Menutup voting" : "Membuka voting",
+      action: newVal ? "CLOSE_VOTING" : "OPEN_VOTING",
+      agendaId: a.id,
     });
 
     alert("Berhasil!");
   };
 
-  /* =====================================================
-     EDIT TOPIC (INLINE)
-     ===================================================== */
+  const handleLogout = () => {
+    signOut(getAuth()).then(() => {
+      localStorage.clear();
+      navigate("/landing-page");
+    });
+  };
+
+  if (loadingRole) {
+    return (
+      <div className="loading-screen-pro">
+        <div className="loading-card-pro">
+          <div className="loader-ring"></div>
+
+          <div className="loader-logo">
+            <img src={Logo} alt="logo" />
+          </div>
+
+          <h3 className="loading-title">Loading Dashboard...</h3>
+          <p className="loading-sub">Please wait a moment</p>
+        </div>
+      </div>
+    );
+  }
+  const EditableAssignedRole = ({ agenda }) => {
+    const [editing, setEditing] = useState(false);
+    const [role, setRole] = useState(agenda.assignedTo || "all");
+
+    // Non-operator hanya melihat, tidak bisa edit
+    if (userRole !== "operator") {
+      return (
+        <span className={`assign-pill role-${agenda.assignedTo || "all"}`}>
+          {!agenda.assignedTo || agenda.assignedTo === "all"
+            ? "Semua Role"
+            : agenda.assignedTo.charAt(0).toUpperCase() +
+              agenda.assignedTo.slice(1)}
+        </span>
+      );
+    }
+
+    const save = async (newRole) => {
+      setEditing(false);
+
+      if (!newRole || newRole === agenda.assignedTo) return;
+
+      await update(ref(db, `agendas/${agenda.id}`), {
+        assignedTo: newRole,
+      });
+
+      await saveLog({
+        userId: userUID,
+        userName: username,
+        role: userRole,
+        action: "EDIT_ASSIGNED_ROLE",
+        agendaId: agenda.id,
+        detail: `Assigned role menjadi: ${newRole}`,
+      });
+    };
+
+    return editing ? (
+      <select
+        className="assign-edit-select"
+        value={role}
+        autoFocus
+        onBlur={() => save(role)}
+        onChange={(e) => {
+          setRole(e.target.value);
+          save(e.target.value);
+        }}
+      >
+        <option value="all">Semua Role</option>
+        <option value="operator">Operator</option>
+        <option value="teacher">Teacher</option>
+        <option value="student">Student</option>
+      </select>
+    ) : (
+      <span
+        className={`assign-pill role-${agenda.assignedTo || "all"}`}
+        onClick={() => setEditing(true)}
+        style={{ cursor: "pointer" }}
+      >
+        {!agenda.assignedTo || agenda.assignedTo === "all"
+          ? "Semua Role"
+          : agenda.assignedTo.charAt(0).toUpperCase() +
+            agenda.assignedTo.slice(1)}
+      </span>
+    );
+  };
+
   const EditableTopic = ({ agenda }) => {
     const [editing, setEditing] = useState(false);
     const [newTopic, setNewTopic] = useState(agenda.topic);
-    const [status, setStatus] = useState("");
 
-    if (userRole !== "operator") {
-      return <span className="agenda-col topic">{agenda.topic}</span>;
-    }
+    if (userRole !== "operator") return <span>{agenda.topic}</span>;
 
-    const saveTopic = async () => {
-      if (newTopic.trim() === "" || newTopic === agenda.topic) {
+    const save = async () => {
+      if (!newTopic.trim() || newTopic === agenda.topic) {
         setEditing(false);
         return;
       }
 
-      setStatus("saving");
-
-      await update(ref(db, `agendas/${agenda.id}`), { topic: newTopic });
+      await update(ref(db, `agendas/${agenda.id}`), {
+        topic: newTopic,
+      });
 
       await saveLog({
         userId: userUID,
@@ -297,88 +276,53 @@ const Home = () => {
         role: userRole,
         action: "EDIT_TOPIC",
         agendaId: agenda.id,
-        detail: `Mengubah topik menjadi: ${newTopic}`,
+        detail: `Topik menjadi: ${newTopic}`,
       });
 
-      setStatus("saved");
-      setTimeout(() => setStatus(""), 1500);
       setEditing(false);
     };
 
-    return (
-      <span className="agenda-col topic editable-topic">
-        {editing ? (
-          <input
-            className="topic-input"
-            autoFocus
-            value={newTopic}
-            onChange={(e) => setNewTopic(e.target.value)}
-            onBlur={saveTopic}
-            onKeyDown={(e) => e.key === "Enter" && saveTopic()}
-          />
-        ) : (
-          <span onClick={() => setEditing(true)}>{agenda.topic}</span>
-        )}
-
-        {status === "saving" && (
-          <small className="save-status">💾 Menyimpan...</small>
-        )}
-        {status === "saved" && (
-          <small className="save-status success">✅ Tersimpan</small>
-        )}
+    return editing ? (
+      <input
+        autoFocus
+        value={newTopic}
+        onChange={(e) => setNewTopic(e.target.value)}
+        onBlur={save}
+        onKeyDown={(e) => e.key === "Enter" && save()}
+        className="topic-input"
+      />
+    ) : (
+      <span onClick={() => setEditing(true)} className="editable-topic">
+        {agenda.topic}
       </span>
     );
   };
-
-  /* =====================================================
-     LOGOUT
-     ===================================================== */
-  const handleLogout = () => {
-    const auth = getAuth();
-
-    signOut(auth)
-      .then(() => {
-        localStorage.clear(); // pastikan role & nama juga dibersihkan
-        navigate("/landing-page");
-      })
-      .catch((error) => {
-        console.error("Logout gagal:", error);
-      });
-  };
-
-  /* =====================================================
-     RENDER PAGE
-     ===================================================== */
-
-  const Tooltip = ({ text }) => <div className="sidebar-tooltip">{text}</div>;
+  // ✅ Filter agenda berdasarkan role user
+  const filteredAgendas =
+    userRole === "operator"
+      ? agendas
+      : agendas.filter(
+          (a) => a.assignedTo === "all" || a.assignedTo === userRole
+        );
 
   return (
     <div className="dashboard-wrapper">
       {/* HEADER */}
       <header className="topbar">
         <div className="left-header">
-          <div className="logo-badge">
-            <img src={Logo} alt="Logo" className="logo-header" />
-          </div>
-          <div className="header-text">
+          <img src={Logo} alt="Logo" className="logo-header" />
+          <div>
             <h2>Sistem Pendukung Keputusan</h2>
             <span className="header-subtitle">SMK Yadika Manado</span>
           </div>
         </div>
 
         <div className="right-header">
-          {/* ✅ Username + Role */}
           <div className="user-meta-header">
             <span className="username-header">{username}</span>
-            <span className={`role-pill role-${userRole}`}>
-              {userRole === "operator"
-                ? "Operator"
-                : userRole === "teacher"
-                ? "Teacher"
-                : "Student"}
-            </span>
+            <span className={`role-pill role-${userRole}`}>{userRole}</span>
           </div>
-          {/* ✅ Avatar */}
+
           <div className="user-avatar" onClick={() => navigate("/profile")}>
             {photoBase64 ? (
               <img src={photoBase64} className="header-avatar" />
@@ -389,36 +333,26 @@ const Home = () => {
             )}
           </div>
 
-          {/* ✅ Logout Button */}
           <button className="logout-btn" onClick={handleLogout}>
             Keluar
           </button>
         </div>
       </header>
 
+      {/* BODY */}
       <div className="content-layout">
         <aside className={`sidebar ${sidebarMini ? "mini" : ""}`}>
-          <div className="menu-item">
-            <button
-              className="menu-btn active"
-              onClick={() => navigate("/home")}
-            >
-              <span className="icon">🏠</span>
-              <span className="text">Dashboard</span>
-            </button>
+          <button className="menu-btn active" onClick={() => navigate("/home")}>
+            🏠 <span className="text">Dashboard</span>
+          </button>
 
-            {sidebarMini && <div className="sidebar-tooltip">Dashboard</div>}
-          </div>
           {userRole === "operator" && (
-            <div className="menu-item">
-              <button
-                className="menu-btn"
-                onClick={() => navigate("/manage-accounts")}
-              >
-                <span className="icon">👥</span>
-                <span className="text">Daftar Akun</span>
-              </button>
-            </div>
+            <button
+              className="menu-btn"
+              onClick={() => navigate("/manage-accounts")}
+            >
+              👥 <span className="text">Daftar Akun</span>
+            </button>
           )}
         </aside>
 
@@ -430,18 +364,14 @@ const Home = () => {
                   Selamat Datang, <span>{username}</span>
                 </h3>
                 <p className="welcome-sub">
-                  Kelola agenda rapat dan proses pengambilan keputusan secara
-                  terstruktur di satu tempat.
+                  Kelola agenda rapat dan proses pengambilan keputusan.
                 </p>
               </div>
 
               {userRole === "operator" && (
                 <button
                   className="primary-cta"
-                  onClick={() => {
-                    if (showForm) setTopic("");
-                    setShowForm(!showForm);
-                  }}
+                  onClick={() => setShowForm(!showForm)}
                 >
                   {showForm ? "Tutup Form" : "Tambah Agenda"}
                 </button>
@@ -449,8 +379,19 @@ const Home = () => {
             </div>
 
             {showForm && userRole === "operator" && (
-              <div className="add-agenda-box card-animated">
+              <div className="add-agenda-box">
                 <div className="agenda-input-row">
+                  <select
+                    className="assign-select"
+                    value={selectedRole}
+                    onChange={(e) => setSelectedRole(e.target.value)}
+                  >
+                    <option value="all">Semua Role</option>
+                    <option value="operator">Operator</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                  </select>
+
                   <input
                     type="text"
                     placeholder="Masukkan topik agenda..."
@@ -459,6 +400,9 @@ const Home = () => {
                   />
                   <button onClick={handleAddAgenda}>Simpan</button>
                 </div>
+
+                {/* ✅ Tambahan baru */}
+
                 <p className="agenda-info-text">
                   Pastikan topik agenda jelas, singkat, dan mudah dipahami oleh
                   guru maupun siswa.
@@ -468,26 +412,24 @@ const Home = () => {
 
             <section className="agenda-section">
               <div className="agenda-header-row">
-                <h4 className="agenda-title">Daftar Agenda Aktif</h4>
+                <h4 className="agenda-title">Daftar Agenda</h4>
                 <span className="agenda-count">
-                  {agendas.length} agenda terdaftar
+                  {filteredAgendas.length} agenda
                 </span>
               </div>
 
               <div className="agenda-list">
-                {agendas.length === 0 ? (
-                  <p className="no-agenda">
-                    Belum ada agenda.{" "}
-                    {userRole === "operator" && "Mulai dengan menambah agenda."}
-                  </p>
+                {filteredAgendas.length === 0 ? (
+                  <p className="no-agenda">Belum ada agenda.</p>
                 ) : (
-                  agendas.map((a, i) => (
-                    <div key={a.id} className="agenda-row card-animated">
+                  filteredAgendas.map((a, i) => (
+                    <div key={a.id} className="agenda-row">
                       <span className="agenda-col number">#{i + 1}</span>
 
                       <EditableTopic agenda={a} />
+                      <span className="agenda-col status-col">
+                        <EditableAssignedRole agenda={a} />
 
-                      <span className="agenda-col status">
                         <span
                           className={
                             a.votingClosed
@@ -523,14 +465,14 @@ const Home = () => {
                               className="toggle-voting-btn"
                               onClick={() => toggleVoting(a)}
                             >
-                              {a.votingClosed ? "Buka Voting" : "Tutup Voting"}
+                              {a.votingClosed ? "Buka" : "Tutup"}
                             </button>
 
                             <button
                               className="reset-btn"
                               onClick={() => handleResetVoting(a)}
                             >
-                              Reset Voting
+                              Reset
                             </button>
 
                             <button
@@ -547,8 +489,44 @@ const Home = () => {
                 )}
               </div>
             </section>
+            <section className="contact-section card-animated">
+              <h4 className="contact-title">Contact Us</h4>
+              <p className="contact-desc">
+                Jika Anda memiliki pertanyaan, kendala, atau membutuhkan
+                bantuan, silakan hubungi kami melalui informasi berikut:
+              </p>
+
+              <ul className="contact-list">
+                <li>📧 Joshua: jkussoy30@gmail.com</li>
+                <li>📧 Griffin: griffinroleh24113@gmail.com</li>
+
+                <li>📱 Joshua: 0858-2402-6268</li>
+                <li>📱 Griffin: 0823-4839-0206</li>
+
+                <iframe
+                  title="Lokasi SMK Yadika Manado"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.597345140141!2d124.98139947447187!3d1.4175081613556781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32870a95df6309dd%3A0x21d86e4847556add!2sUniversitas%20Klabat!5e0!3m2!1sen!2sid!4v1764084084275!5m2!1sen!2sid"
+                  width="100%"
+                  height="260"
+                  style={{
+                    borderRadius: "14px",
+                    border: "0",
+                    marginTop: "12px",
+                  }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </ul>
+            </section>
           </div>
         </main>
+        <footer className="footer">
+          <p>
+            © {new Date().getFullYear()} Sistem Pendukung Keputusan — Filkom
+            Unklab
+          </p>
+        </footer>
       </div>
     </div>
   );

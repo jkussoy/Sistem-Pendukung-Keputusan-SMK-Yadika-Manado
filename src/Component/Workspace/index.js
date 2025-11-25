@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Outlet, NavLink } from "react-router-dom";
 import { db } from "../../Config/Firebase";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, get } from "firebase/database";
 import Logo from "../../Assets/Image/Logo.png";
 import "./style.css";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -19,44 +19,25 @@ const Workspace = () => {
   useEffect(() => {
     const auth = getAuth();
 
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUsername(user.displayName || user.email || "User");
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigate("/login");
+        return;
       }
-    });
 
-    const storedRole = localStorage.getItem("userRole");
-    if (storedRole) setUserRole(storedRole);
+      const snap = await get(ref(db, `users/${user.uid}`));
 
-    const agendaRef = ref(db, `agendas/${agendaId}`);
-    const unsubscribeAgenda = onValue(agendaRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setAgenda({ id: agendaId, ...snapshot.val() });
+      if (snap.exists()) {
+        const data = snap.val();
+        setUsername(data.name);
+        setUserRole(data.role);
       } else {
-        setAgenda(null);
+        setUsername(user.email);
       }
     });
 
-    return () => {
-      unsub();
-      unsubscribeAgenda();
-    };
-  }, [agendaId]);
-
-  useEffect(() => {
-    const storedName = localStorage.getItem("teacherName");
-    const storedRole = localStorage.getItem("userRole");
-
-    if (storedName) setUsername(storedName);
-    if (storedRole) setUserRole(storedRole);
-
-    const agendaRef = ref(db, `agendas/${agendaId}`);
-    return onValue(agendaRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setAgenda({ id: agendaId, ...snapshot.val() });
-      } else setAgenda(null);
-    });
-  }, [agendaId]);
+    return () => unsub();
+  }, [navigate]);
 
   const handleLogout = () => {
     const auth = getAuth();
@@ -202,6 +183,12 @@ const Workspace = () => {
             </div>
           </div>
         </main>
+        <footer className="workspace-footer">
+          <p>
+            © {new Date().getFullYear()} Sistem Pendukung Keputusan — Filkom
+            Unklab
+          </p>
+        </footer>
       </div>
     </div>
   );

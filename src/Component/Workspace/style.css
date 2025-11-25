@@ -352,3 +352,16 @@
     border-radius: 8px;
   }
 }
+.workspace-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  border-top: 1px solid #e2e8f0;
+  z-index: 999;
+}

@@ -1,28 +1,28 @@
 /* ===============================
-   ✅ WRAPPER BACKGROUND
+   ✅ BACKGROUND — CONSISTENT BRAND
 ================================= */
 .profile-wrapper {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #0047ab, #002d6b);
+  background: linear-gradient(135deg, #1d4ed8, #0f1e4d);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px;
+  padding: 28px;
 }
 
 /* ===============================
-   ✅ PROFILE CARD PREMIUM
+   ✅ PROFILE CARD
 ================================= */
 .profile-card {
   width: 100%;
-  max-width: 440px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(18px);
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(22px);
   border-radius: 22px;
-  padding: 34px 30px;
+  padding: 38px 34px;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
   color: #ffffff;
   text-align: center;
   position: relative;
@@ -30,35 +30,23 @@
 }
 
 /* ===============================
-   ✅ BUTTON BACK
+   ✅ BACK BUTTON — LESS NOISY
 ================================= */
-/* ✅ BUTTON BACK — PREMIUM BLUE */
 .back-btn {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  background: linear-gradient(135deg, #1e73ff, #004ce6) !important;
-  border: none !important;
-  padding: 8px 16px !important;
-  border-radius: 12px !important;
-  color: #ffffff !important;
-  font-size: 13px !important;
+  top: 18px;
+  left: 18px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  color: white;
   cursor: pointer;
   transition: 0.18s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 10px 26px rgba(30, 115, 255, 0.45) !important;
 }
 .back-btn:hover {
-  transform: translateX(-2px);
-  box-shadow: 0 14px 32px rgba(30, 115, 255, 0.6) !important;
-  filter: brightness(1.05);
-}
-
-/* Icon look */
-.back-btn span {
-  font-size: 14px;
+  background: rgba(255, 255, 255, 0.32);
 }
 
 /* ===============================
@@ -67,16 +55,16 @@
 .avatar-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .avatar {
-  width: 86px;
-  height: 86px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
 }
 
 .avatar.default {
@@ -93,21 +81,19 @@
    ✅ UPLOAD BUTTON
 ================================= */
 .upload-btn {
-  background: rgba(255, 255, 255, 0.18);
-  padding: 7px 14px;
-  border-radius: 12px;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 12px;
   color: #ffffff;
   cursor: pointer;
   display: inline-block;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
   transition: 0.2s;
 }
-
 .upload-btn:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.32);
 }
-
 .upload-btn input {
   display: none;
 }
@@ -116,94 +102,112 @@
    ✅ TITLE
 ================================= */
 .profile-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 
 /* ===============================
-   ✅ FORM GROUP
+   ✅ INPUT GROUP
 ================================= */
 .profile-group {
   text-align: left;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .profile-group label {
   font-size: 13px;
   font-weight: 600;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 6px;
   display: block;
 }
 
-/* ===============================
-   ✅ INPUT FIELD
-================================= */
 .profile-group input {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(203, 213, 225, 0.75);
-  background: rgba(255, 255, 255, 0.92);
+  border-radius: 12px;
+  border: 1px solid rgba(203, 213, 225, 0.7);
+  background: rgba(255, 255, 255, 0.95);
   color: #0f172a;
   font-size: 14px;
   outline: none;
   transition: 0.25s ease;
 }
-
 .profile-group input:disabled {
-  opacity: 0.7;
+  opacity: 0.65;
 }
-
 .profile-group input:focus {
   border-color: #2563eb;
   background: #ffffff;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.45);
 }
 
 /* ===============================
-   ✅ BUTTON SIMPAN
+   ✅ PRIMARY BUTTON (SAVE)
 ================================= */
 .save-btn {
   width: 100%;
   padding: 12px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, #1e73ff, #004ce6);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #ffffff;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 8px;
   transition: 0.18s ease;
-  box-shadow: 0 18px 38px rgba(30, 115, 255, 0.45);
+  box-shadow: 0 14px 36px rgba(37, 99, 235, 0.48);
 }
-
 .save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 26px 48px rgba(30, 115, 255, 0.6);
+  box-shadow: 0 20px 44px rgba(37, 99, 235, 0.62);
 }
 
 /* ===============================
-   ✅ BUTTON GANTI PASSWORD
+   ✅ SECONDARY BUTTON
 ================================= */
 .password-btn {
   width: 100%;
-  padding: 12px;
-  border-radius: 14px;
-  border: none;
-  background: linear-gradient(135deg, #1e73ff, #004ce6);
+  padding: 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.14);
   color: white;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   margin-top: 10px;
   transition: 0.18s ease;
 }
-
 .password-btn:hover {
-  background: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.26);
+}
+
+/* ===============================
+   ✅ MOBILE RESPONSIVE
+================================= */
+@media (max-width: 480px) {
+  .profile-card {
+    padding: 28px 22px;
+  }
+  .profile-title {
+    font-size: 19px;
+  }
+  .save-btn,
+  .password-btn {
+    font-size: 13px;
+    padding: 10px;
+  }
+  .back-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+.save-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* ===============================

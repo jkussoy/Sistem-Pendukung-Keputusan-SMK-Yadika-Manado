@@ -3,6 +3,11 @@
    ========================================================= */
 
 /* Fullscreen background */
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ✅ penting */
+}
 .loading-screen-pro {
   height: 100vh;
   width: 100vw;
@@ -118,6 +123,25 @@
   gap: 20px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.4);
   z-index: 999;
+}
+.topbar h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+@media (min-width: 1280px) {
+  .topbar h2 {
+    font-size: 20px;
+  }
+}
+
+/* Subtitle sekolah */
+.header-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: #64748b;
+  margin-top: -2px;
 }
 
 .left-header {
@@ -299,8 +323,8 @@
 .main-content {
   flex: 1;
   margin-left: 210px;
-  padding: 20px 32px 28px 32px;
-  height: calc(100vh - 64px);
+  padding: 20px 32px 150px 32px; /* ✅ space for footer */
+  min-height: calc(100vh - 64px);
   overflow-y: auto;
   transition: margin-left 0.25s ease;
 }
@@ -582,6 +606,12 @@
 }
 
 /* Status pill */
+.status-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -749,6 +779,8 @@
     flex-direction: column;
     gap: 8px;
     padding: 14px 12px;
+    align-items: flex-start !important;
+    text-align: left !important;
   }
 
   .agenda-actions {
@@ -765,6 +797,80 @@
 
 /* Mobile Portrait */
 @media (max-width: 576px) {
+  /* FOOTER & GLOBAL */
+  .footer {
+    font-size: 12px;
+    padding: 10px 0;
+  }
+
+  /* TOPBAR MOBILE */
+  .topbar {
+    height: auto;
+    padding: 10px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .left-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topbar h2 {
+    font-size: 15px;
+  }
+
+  .header-subtitle {
+    display: none;
+  }
+
+  .logo-header {
+    width: 26px;
+    height: 26px;
+  }
+
+  .right-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .username-header {
+    font-size: 13px;
+  }
+
+  .role-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .header-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .logout-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 60px;
+    top: 90px; /* mengikuti tinggi topbar HP */
+    padding-inline: 6px;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    margin-left: 60px;
+    padding: 15px 12px 22px;
+  }
+
+  /* HOME TITLE */
   .welcome-title {
     font-size: 16px;
   }
@@ -772,55 +878,17 @@
   .welcome-sub {
     font-size: 11px;
   }
-  .topbar {
-    height: auto;
-    padding: 6px 12px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .header-text {
-    display: none; /* ✅ hemat ruang di HP */
-  }
-  .header-text h2 {
-    font-size: 13px;
-  }
 
-  .header-subtitle {
-    font-size: 10px;
-  }
-  .logo-header {
-    width: 26px;
-    height: 26px;
-  }
-  .user-info {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .sidebar {
-    top: 72px;
-    width: 64px;
-  }
-
-  .main-content {
-    margin-left: 64px;
-    padding: 12px 12px 20px;
-  }
-
+  /* AGENDA */
   .agenda-row {
-    padding: 12px 12px;
+    padding: 12px;
   }
 
   .agenda-actions button {
     flex: 1;
   }
-  .logout {
-    padding: 6px 10px;
-    font-size: 11px;
-  }
 }
+
 /* =============================
    SIDEBAR TOGGLE BUTTON
    ============================= */
@@ -988,4 +1056,133 @@
 .logout-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 18px 42px rgba(185, 28, 28, 0.6);
+}
+.contact-section {
+  background: white;
+  border: 1px solid rgba(203, 213, 225, 0.6);
+  padding: 18px 22px;
+  border-radius: 14px;
+  margin-top: 24px;
+}
+
+.contact-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+
+.contact-desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.contact-list {
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.7;
+  padding-left: 0;
+  list-style: none;
+}
+.assign-select {
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 13px;
+  outline: none;
+  width: 150px; /* ✅ tidak kepanjangan */
+  min-width: 130px;
+  cursor: pointer;
+}
+
+.assign-select:focus {
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.45);
+}
+
+.agenda-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.topic-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.assign-pill {
+  align-self: flex-start;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Color variants */
+.role-all {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.role-operator {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+}
+
+.role-teacher {
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+}
+
+.role-student {
+  background: rgba(234, 179, 8, 0.12);
+  color: #b45309;
+}
+@media (max-width: 768px) {
+  .topic-wrapper {
+    width: 100%;
+  }
+  .assign-pill {
+    margin-top: -2px;
+  }
+}
+.assign-edit-select {
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  font-size: 11px;
+  outline: none;
+}
+
+.assign-edit-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.45);
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  border-top: 1px solid #e2e8f0;
+  z-index: 999;
+}
+.map-link {
+  color: #1e40af;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.map-link:hover {
+  color: #0f172a;
 }

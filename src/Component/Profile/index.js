@@ -15,6 +15,7 @@ const Profile = () => {
   const [photoBase64, setPhotoBase64] = useState("");
   const [userUID, setUserUID] = useState("");
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   // ✅ LOAD USER
   useEffect(() => {
@@ -68,11 +69,11 @@ const Profile = () => {
   // ✅ SAVE PROFILE
   const handleSave = async () => {
     if (!name.trim()) return alert("Nama tidak boleh kosong!");
+    setSaving(true);
 
-    await update(ref(db, `users/${userUID}`), {
-      name,
-    });
+    await update(ref(db, `users/${userUID}`), { name });
 
+    setSaving(false);
     alert("Profil berhasil diperbarui!");
   };
 
